@@ -1,0 +1,7 @@
+{
+  "name": "clinicapsicobk",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

@@ -1,0 +1,69 @@
+.guias {
+    font-size: 15px;
+}
+
+.campo {
+    border: 1px solid var(--ion-color-primary);
+    border-radius: 2px !important;
+    padding-left: 5px !important;
+    margin-bottom: 10px;
+    background-color:rgb(245, 245, 245);
+    height: 30px;
+    font-size: 15px;
+}
+
+.data {
+    width: 155px;
+}
+
+.dados {
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.labels {
+    //font-weight: bold;
+    color: var(--ion-color-primary);
+    font-size: 17px;
+}
+
+.resumo {
+    padding: 3px;
+    border: 1px solid #10dc60;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.resumoLinha {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.tituloResumo {
+    color: var(--ion-color-tertiary);
+    font-size: 16px;
+    padding: 2px;
+    padding-bottom: 0px;
+    padding-left: 5px;
+}
+
+.resumoQtde {
+    font-weight: bold;
+}
+
+.botao {
+    
+    border-radius: 2px;
+    padding: 4px;
+    font-size: 15px;
+    text-align: center;
+    //margin-top: 8px;
+
+    &.sessoes {
+        border: 1px solid var(--ion-color-tertiary);
+        background-color: white;
+        color: var(--ion-color-tertiary);
+        margin-left: 10px;
+    }
+
+}

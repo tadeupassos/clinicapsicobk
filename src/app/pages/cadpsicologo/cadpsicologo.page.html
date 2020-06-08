@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>      
+    <ion-title>Cadastrar Psicólogo</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="fGroup" class="ion-padding">
+
+    <ion-row class="margemLinha">
+      <ion-col size="3">
+        <ion-text><h5>Nome <ion-text color="danger">*</ion-text></h5></ion-text>
+        <ion-input type="text" formControlName="nome" class="campo"></ion-input>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.nome.errors">
+          <span *ngIf="fGroup.controls.nome.errors.required && fGroup.controls.nome.touched">Esse campo é obrigatório</span>
+        </div>
+      </ion-col>
+
+      <ion-col size="2">
+        <ion-text><h5>Celular <ion-text color="danger">*</ion-text></h5></ion-text>
+        <ion-input type="text" maxlength="15" formControlName="celular" class="campo" (keypress)="formatoCelular($event)"></ion-input>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.celular.errors">
+          <span *ngIf="fGroup.controls.celular.errors.required && fGroup.controls.celular.touched">Esse campo é obrigatório</span>
+        </div>        
+      </ion-col>      
+ 
+    </ion-row>
+
+    <ion-row class="margemLinha">
+      <ion-col size="3">
+        <ion-text><h5>E-mail <ion-text color="danger">*</ion-text></h5></ion-text>
+        <ion-input type="text" formControlName="email" class="campo"></ion-input>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.email.errors">
+          <span *ngIf="fGroup.controls.email.errors.required && fGroup.controls.email.touched">Esse campo é obrigatório</span>
+        </div>        
+      </ion-col>      
+
+      <ion-col size="2">
+        <ion-text><h5>Senha <ion-text color="danger">*</ion-text></h5></ion-text>
+        <ion-input type="text" maxlength="6" formControlName="senha" class="campo"></ion-input>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.senha.errors">
+          <span *ngIf="fGroup.controls.senha.errors.required && fGroup.controls.senha.touched">Esse campo é obrigatório</span>
+        </div>
+      </ion-col>
+ 
+    </ion-row>    
+    <ion-row class="margemLinha">
+      <ion-col size="1">
+        <ion-text><h5>CRP <ion-text color="danger">*</ion-text></h5></ion-text>
+        <ion-input type="number" formControlName="crp" class="campo"></ion-input>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.crp.errors">
+          <span *ngIf="fGroup.controls.crp.errors.required && fGroup.controls.crp.touched">Esse campo é obrigatório</span>
+        </div>        
+      </ion-col>
+ 
+    </ion-row>    
+    <br>
+    <br>
+    <ion-row>
+      <ion-col size="5">
+        <ion-button [disabled]="!fGroup.valid" (click)="salvarDados()" expand="block">
+          Gravar Dados
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        
+      </ion-col>
+    </ion-row>
+
+  </form>
+</ion-content>

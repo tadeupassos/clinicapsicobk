@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>    
+    <ion-title>Prontuário: {{ paciente.nome }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row class="ion-margin prontuario">
+    <ion-col size="3">
+      <ion-text>
+        <h2><strong>Número: {{ numeroProntuario }}</strong></h2>
+      </ion-text>
+    </ion-col>    
+  </ion-row>
+
+  <form [formGroup]="fGroup" class="ion-padding">
+    <ion-row>    
+      <ion-col size="10">
+        <ion-text><h5>Demanda: </h5></ion-text>
+        <ion-input type="text" formControlName="demanda" class="campo"></ion-input>
+      </ion-col>    
+    </ion-row>
+
+    <ion-row>    
+      <ion-col size="10">
+        <ion-text><h5>Objetivos: </h5></ion-text>
+        <ion-input type="text" formControlName="objetivos" class="campo"></ion-input>
+      </ion-col>    
+    </ion-row>
+
+    <ion-row>    
+      <ion-col size="10">
+        <ion-text><h5>Evolução: </h5></ion-text>
+        <ion-textarea rows="6" cols="20" formControlName="evolucao" class="evolucao"></ion-textarea>
+      </ion-col>    
+    </ion-row>
+
+    <ion-row>    
+      <ion-col size="10">
+        <ion-text><h5>Procedimentos: </h5></ion-text>
+        <ion-input type="text" formControlName="procedimentos" class="campo"></ion-input>
+      </ion-col>    
+    </ion-row>
+
+    <ion-row>    
+      <ion-col size="10">
+        <ion-text><h5>Encaminhamento: </h5></ion-text>
+        <ion-input type="text" formControlName="encaminhamento" class="campo"></ion-input>
+      </ion-col>    
+    </ion-row>    
+ 
+    <br>
+    <br>
+    <ion-row>
+      <ion-col size="9">
+        <ion-button [disabled]="!fGroup.valid" (click)="salvarDados()" expand="block" size="large">
+          Gravar Dados
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        
+      </ion-col>
+    </ion-row>
+
+  </form>
+</ion-content>

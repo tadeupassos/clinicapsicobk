@@ -1,0 +1,76 @@
+.fundosearch {
+    width: 70%;
+}
+
+.borda {
+    border: 1px solid var(--ion-color-primary);
+    border-radius: 10px;
+    padding: 10px;
+    margin: 8px;
+}
+
+.colorTipoParticular {
+    color: var(--ion-color-success);
+    font-size: 15px;
+}
+
+.colorTipoConvenio {
+    color: var(--ion-color-tertiary);
+    font-size: 15px;
+}
+
+.nomePsico{
+    color: gray;
+    font-size: 15px;
+}
+
+
+.botao:hover {
+    background-color: rgb(83, 83, 83);
+    opacity: 0.5;
+}
+
+.botao {
+    
+    border-radius: 2px;
+    padding: 4px;
+    font-size: 15px;
+    text-align: center;
+
+    &.nome {
+        border: 1px solid var(--ion-color-primary);
+        background-color: white;
+        color: var(--ion-color-primary);
+    }
+
+    &.prontuario {
+        border: 1px solid var(--ion-color-secondary);
+        background-color: white;
+        color: var(--ion-color-secondary);
+        margin-left: 10px;
+    }
+
+    &.sessoes {
+        border: 1px solid var(--ion-color-success);
+        background-color: white;
+        color: var(--ion-color-success);
+        margin-left: 10px;
+    }
+
+    &.guias {
+        border: 1px solid var(--ion-color-tertiary);
+        background-color: white;
+        color: var(--ion-color-tertiary);
+        margin-left: 10px;
+    }
+
+}
+
+.linhaDeCima  {
+    border-top: 1px solid var(--ion-color-dark);
+}
+
+.linhaDebaixo {
+    border-bottom: 2px solid var(--ion-color-primary);
+}
+

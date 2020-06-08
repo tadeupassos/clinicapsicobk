@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>   
+    <ion-title>Cadastro de Sessão - {{ nomePaciente }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <form [formGroup]="fGroup" class="ion-padding">
+
+    <ion-row *ngIf="numeroGuia != ''">
+      <ion-label class="flex-left">Número da Guia:</ion-label>
+      <ion-col size="10"><ion-text class="textoLeitura flex-left">{{ sessao.numeroGuia }}</ion-text></ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-label class="flex-left">Psicólogo:</ion-label>
+      <ion-col size="10"><ion-text class="textoLeitura flex-left">{{ psicologo }}</ion-text></ion-col>
+    </ion-row>
+
+    <ion-row class="margemLinha">
+      <ion-col size="2">
+        <ion-text><h5>Data da Sessão<ion-text color="danger">*</ion-text></h5></ion-text>
+        <ion-input type="text" formControlName="dataSessao" class="campo" (keypress)="mascaraData($event)"></ion-input>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.dataSessao.errors">
+          <span *ngIf="fGroup.controls.dataSessao.errors.required && fGroup.controls.dataSessao.touched">Esse campo é obrigatório</span>
+        </div>
+      </ion-col>
+      <ion-col size="2">
+        <ion-text><h5>Dia da Semana <ion-text color="danger">*</ion-text></h5></ion-text>
+        <select formControlName="diaSemana" class="campo selecionar">
+          <option>Segunda-feira</option>
+          <option>terça-feira</option>
+          <option>Quarta-feira</option>
+          <option>Quinta-feira</option>
+          <option>Sexta-feira</option>
+          <option>Sábado</option>
+        </select>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.diaSemana.errors">
+          <span *ngIf="fGroup.controls.diaSemana.errors.required && fGroup.controls.diaSemana.touched">Esse campo é obrigatório</span>
+        </div>                
+      </ion-col>
+      <ion-col size="1">
+        <ion-text><h5>Horário <ion-text color="danger">*</ion-text></h5></ion-text>
+        <ion-input type="text" maxlength="5" formControlName="horaSessao" class="campo" (keypress)="horaFormato($event)"></ion-input>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.horaSessao.errors">
+          <span *ngIf="fGroup.controls.horaSessao.errors.required && fGroup.controls.horaSessao.errors.touched">
+            Esse campo é obrigatório
+          </span>
+        </div>
+      </ion-col>                  
+    </ion-row>
+  </form>
+
+  <br>
+  <ion-row>
+    <ion-col size="5">
+      <ion-button [disabled]="!fGroup.valid" (click)="salvarDados()" expand="block">
+        Gravar Dados
+      </ion-button>
+    </ion-col>
+    <ion-col>
+      
+    </ion-col>
+  </ion-row>  
+</ion-content>

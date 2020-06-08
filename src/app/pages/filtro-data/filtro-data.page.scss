@@ -1,0 +1,19 @@
+.tituloFiltro {
+    position: absolute;
+    font-size: 18px;
+    text-align: center;
+    left: 50px;
+    margin-top: 10px;
+    background-color: white;
+    color: gray;
+    font-weight: bold;
+}
+
+.borda {
+    border: 1px solid var(--ion-color-primary);
+    border-radius: 5px;
+    margin-top: 20px;
+    padding: 5px;
+    color: #737373;
+    width: 500px;
+}

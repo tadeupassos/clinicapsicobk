@@ -1,0 +1,53 @@
+<ion-header>     
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>     
+    <ion-title>Guias - {{ convenioNome }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-fab *ngIf="mostrarBotaoCadastrar" [routerLink]="['/menu/cadguia','paciente',pacienteId]" horizontal="end" vertical="top" slot="fixed" edge style=" margin-right: 50px" >
+    <ion-fab-button color="success" ion-fab>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  
+  <ion-row>
+    <ion-col size="3">
+      <ion-button (click)="openModalfiltrar()" expand="block" >
+        Filtro{{ filtroEscolhido }}
+      </ion-button>
+    </ion-col> 
+  </ion-row>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngFor="let g of guias" size="auto" >
+        <ion-card button class="ion-padding" [routerLink]="['/menu/cadguia','guia',g.id]" >
+          <ion-label>
+            <h2><span class="labels">Número da Guia: </span> <span class="dados">{{ g.numeroGuia }}</span></h2>
+            <h2><span class="labels">Paciente: </span> <span class="dados">{{ g.nomePaciete }}</span></h2>
+            <h3><span class="labels">Data Início: </span><span class="dados">{{ g.dataInicio }} </span></h3>
+            <!-- <h3><span class="labels">Data Fim: </span> <span class="dados">{{ g.dataFim }}</span></h3> -->
+            <h2><span class="labels">Qtde Sessões: </span> <span class="dados">{{ g.qtdeSessoes }}</span></h2>
+            <h2><span class="labels">Psicólogo: </span><span class="dados">{{ g.nomePsicologo }}</span> </h2>
+          </ion-label>
+        </ion-card> 
+      </ion-col>
+    </ion-row>
+  </ion-grid> 
+</ion-content>
+<ion-footer *ngIf="mostrarResumo">
+  <ion-text class="tituloResumo">
+    Quantidade de sessões por psicólogo
+  </ion-text>
+  <ion-row class="resumoLinha">
+    <ion-col *ngFor="let r of resumo" size="auto">
+      <div class="botao sessoes">
+        <span>{{ r.psicologo }}</span> - <span class="resumoQtde">{{ r.qtde }}</span>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-footer>

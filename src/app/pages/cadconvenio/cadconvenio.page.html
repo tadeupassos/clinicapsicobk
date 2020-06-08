@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>    
+    <ion-title>Cadastrar Convênio</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="fGroup" class="ion-padding">
+
+    <ion-row class="margemLinha">
+      <ion-col size="3">
+        <ion-text><h5>Convênio <ion-text color="danger">*</ion-text></h5></ion-text>
+        <ion-input type="text" formControlName="convenio" class="campo"></ion-input>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.convenio.errors">
+          <span *ngIf="fGroup.controls.convenio.errors.required && fGroup.controls.convenio.touched">Esse campo é obrigatório</span>
+        </div>
+      </ion-col>
+
+      <ion-col size="2">
+        <ion-text><h5>Valor <ion-text color="danger">*</ion-text></h5></ion-text>
+        <ion-input type="text" maxlength="6" formControlName="valor" class="campo" (keypress)="formatarValor($event)"></ion-input>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.valor.errors">
+          <span *ngIf="fGroup.controls.valor.errors.required && fGroup.controls.valor.touched">Esse campo é obrigatório</span>
+        </div>        
+      </ion-col>      
+ 
+    </ion-row>
+    <br>
+    <br>
+    <ion-row>
+      <ion-col size="5">
+        <ion-button [disabled]="!fGroup.valid" (click)="salvarDados()" expand="block">
+          Gravar Dados
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        
+      </ion-col>
+    </ion-row>
+
+  </form>
+
+</ion-content>

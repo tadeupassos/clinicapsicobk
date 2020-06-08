@@ -1,0 +1,176 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>    
+    <ion-title>Cadastrar Novo Paciente</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="fGroup" class="ion-padding">
+
+    <ion-row class="margemLinha">
+      <ion-col size="2">
+        <ion-text><h5>Data Início <ion-text color="danger">*</ion-text></h5></ion-text>
+        <ion-input type="text" maxlength="10" formControlName="dataInicio" class="campo data" (keypress)="dataInicioMascara($event)"></ion-input>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.dataInicio.errors">
+          <span *ngIf="fGroup.controls.dataInicio.errors.required && fGroup.controls.dataInicio.touched">Esse campo é obrigatório</span>
+        </div>
+      </ion-col>
+      <ion-col size="2">
+        <ion-text><h5>Atendimento <ion-text color="danger">*</ion-text></h5></ion-text>
+        <select formControlName="atendimento" class="campo selecionar">
+          <option value="Convênio" selected>Convênio</option>
+          <option value="Particular">Particular</option>
+        </select>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.atendimento.errors">
+          <span *ngIf="fGroup.controls.atendimento.errors.required && fGroup.controls.atendimento.touched">Esse campo é obrigatório</span>
+        </div>                
+      </ion-col>
+      <ion-col size="2" *ngIf="fGroup.value.atendimento == 'Convênio'">
+        <ion-text><h5>Convênio <ion-text color="danger">*</ion-text></h5></ion-text>
+        <select formControlName="convenio" class="campo selecionar">
+          <option *ngFor="let c of convenios" [value]="c.convenio">{{ c.convenio }}</option>
+        </select>
+        <!-- <div class="mensagemValidacao" *ngIf="fGroup.controls.convenio.errors">
+          <span *ngIf="fGroup.controls.convenio.errors.required">Esse campo é obrigatório</span>
+        </div>                 -->
+      </ion-col>      
+      <ion-col size="2" *ngIf="fGroup.value.atendimento == 'Particular'">
+        <ion-text><h5>Valor <ion-text color="danger">*</ion-text></h5></ion-text>
+        <ion-input type="text" maxlength="6" formControlName="valor" class="campo selecionar" (keypress)="formatarValor($event)"></ion-input>
+        <!-- <div class="mensagemValidacao" *ngIf="fGroup.controls.valor.errors">
+          <span *ngIf="fGroup.controls.valor.errors.required && fGroup.controls.valor.touched">Esse campo é obrigatório</span>
+        </div>         -->
+      </ion-col>      
+    </ion-row>
+
+    <ion-row class="margemLinha">
+      <ion-col size="3">
+        <ion-text><h5>Nome <ion-text color="danger">*</ion-text></h5></ion-text>
+        <ion-input type="text" formControlName="nome" class="campo"></ion-input>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.nome.errors">
+          <span *ngIf="fGroup.controls.nome.errors.required && fGroup.controls.nome.touched">Esse campo é obrigatório</span>
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <ion-text><h5>E-mail</h5></ion-text>
+        <ion-input type="text" formControlName="email" class="campo"></ion-input>
+        <!-- <div class="mensagemValidacao" *ngIf="fGroup.controls.email.errors">
+          <span *ngIf="fGroup.controls.email.errors.required && fGroup.controls.email.touched">Esse campo é obrigatório</span>
+          <span *ngIf="fGroup.controls.email.errors.pattern">Formato de e-mail inválido</span>
+        </div> -->
+      </ion-col>
+      <ion-col size="2">
+        <ion-text><h5>Data Nascimento <ion-text color="danger">*</ion-text></h5></ion-text>
+        <ion-input type="text" maxlength="10" formControlName="dataNascimento" class="campo data" (keypress)="dataNascimentoMascara($event)"></ion-input>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.dataNascimento.errors">
+          <span *ngIf="fGroup.controls.dataNascimento.errors.required && fGroup.controls.dataNascimento.touched">Esse campo é obrigatório
+          </span>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="margemLinha">
+      <ion-col size="2">
+        <ion-text><h5>Celular 1 <ion-text color="danger">*</ion-text></h5></ion-text>
+        <ion-input type="text" maxlength="15" formControlName="celular1" class="campo" (keypress)="celular1Numero($event)"></ion-input>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.celular1.errors">
+          <span *ngIf="fGroup.controls.celular1.errors.required && fGroup.controls.celular1.touched">Esse campo é obrigatório</span>
+        </div>
+      </ion-col>
+      <ion-col size="2">
+        <ion-text><h5>Celular 2</h5></ion-text>
+        <ion-input type="text" maxlength="15" formControlName="celular2" class="campo" (keypress)="celular2Numero($event)"></ion-input>
+      </ion-col>
+      <ion-col size="2">
+        <ion-text><h5>Telefone Fixo</h5></ion-text>
+        <ion-input type="text" maxlength="15" formControlName="telefone" class="campo" (keypress)="fixoNumero($event)"></ion-input>
+      </ion-col>      
+      <ion-col size="3">
+        <ion-text><h5>Nome dos Responsáveis</h5></ion-text>
+        <ion-input type="text" formControlName="responsaveis" class="campo"></ion-input>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="margemLinha">
+      <ion-col size="2">
+        <ion-text><h5>CEP <ion-text color="danger">*</ion-text></h5></ion-text>
+        <ion-input type="text" maxlength="8" formControlName="cep" class="campo cep" (keyup)="numeroCEP()" (ionBlur)="getCEP()"></ion-input>
+        <ion-spinner *ngIf="mostrarSpinner" name="lines"></ion-spinner>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.cep.errors">
+          <span *ngIf="fGroup.controls.cep.errors.required && fGroup.controls.cep.touched">Esse campo é obrigatório</span>
+          <span *ngIf="fGroup.controls.cep.errors.minlength">CEP faltando número</span>
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <ion-text><h5>Cidade <ion-text color="danger">*</ion-text></h5></ion-text>
+        <ion-input type="text" formControlName="cidade" class="campo"></ion-input>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.cidade.errors">
+          <span *ngIf="fGroup.controls.cidade.errors.required && fGroup.controls.cidade.touched">Esse campo é obrigatório</span>
+        </div>        
+      </ion-col>
+      <ion-col size="4">
+        <ion-text><h5>Endereço <ion-text color="danger">*</ion-text></h5></ion-text>
+        <ion-input type="text" formControlName="endereco" class="campo"></ion-input>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.endereco.errors">
+          <span *ngIf="fGroup.controls.endereco.errors.required && fGroup.controls.endereco.touched">Esse campo é obrigatório</span>
+        </div>         
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="margemLinha">    
+      <ion-col size="1">
+        <ion-text><h5>Número <ion-text color="danger">*</ion-text></h5></ion-text>
+        <ion-input type="number" maxlength="6" formControlName="numero" class="campo"></ion-input>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.numero.errors">
+          <span *ngIf="fGroup.controls.numero.errors.required && fGroup.controls.numero.touched">Esse campo é obrigatório</span>
+        </div>         
+      </ion-col>
+      <ion-col size="3">
+        <ion-text><h5>Complemento </h5></ion-text>
+        <ion-input type="text" formControlName="complemento" class="campo"></ion-input>      
+      </ion-col>                 
+      <ion-col size="3">
+        <ion-text><h5>Bairro <ion-text color="danger">*</ion-text></h5></ion-text>
+        <ion-input type="text" formControlName="bairro" class="campo"></ion-input>
+      </ion-col>
+      <div class="mensagemValidacao" *ngIf="fGroup.controls.bairro.errors">
+        <span *ngIf="fGroup.controls.bairro.errors.required && fGroup.controls.bairro.touched">Esse campo é obrigatório</span>
+      </div>         
+    </ion-row>
+
+    <ion-row class="margemLinha">    
+      <ion-col size="3">
+        <ion-text><h5>Psicólogo <ion-text color="danger">*</ion-text></h5></ion-text>
+        <select formControlName="psicologo" class="campo">
+          <option *ngFor="let p of psicologos" [value]="p.nome" selected>{{ p.nome }}</option>
+        </select>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.psicologo.errors">
+          <span *ngIf="fGroup.controls.psicologo.errors.required && fGroup.controls.psicologo.touched">Esse campo é obrigatório</span>
+        </div>                
+      </ion-col>
+      <ion-col size="1">
+        <ion-text><h5>CRP <ion-text color="danger">*</ion-text></h5></ion-text>
+        <ion-input type="number" formControlName="crp" class="campo" readonly></ion-input>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.crp.errors">
+          <span *ngIf="fGroup.controls.crp.errors.required && fGroup.controls.crp.touched">Esse campo é obrigatório</span>
+        </div>         
+      </ion-col>                 
+    </ion-row>   
+    <br>
+    <br>
+    <ion-row>
+      <ion-col size="9">
+        <ion-button [disabled]="!fGroup.valid" (click)="salvarDados()" expand="block" size="large">
+          Gravar Dados
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        
+      </ion-col>
+    </ion-row>
+
+  </form>
+</ion-content>

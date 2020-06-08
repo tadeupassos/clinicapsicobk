@@ -1,0 +1,24 @@
+.borda {
+    border: 1px solid var(--ion-color-primary);
+    border-radius: 10px;
+    padding: 10px;
+    margin: 8px;
+}
+
+.botao{
+    
+    border-radius: 2px;
+    padding: 1px;
+    font-size: 20px;
+    text-align: center;
+    margin-top: 8px;
+
+    border: 1px solid var(--ion-color-primary);
+    background-color: white;
+    color: var(--ion-color-primary);
+}
+
+.texto {
+    font-size: 20px;
+}
+
