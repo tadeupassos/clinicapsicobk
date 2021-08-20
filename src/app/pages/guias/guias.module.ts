@@ -8,6 +8,7 @@ import { GuiasPageRoutingModule } from './guias-routing.module';
 
 import { GuiasPage } from './guias.page';
 import { FiltroDataPageModule } from '../filtro-data/filtro-data.module';
+import { BrMaskerModule } from 'br-mask';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { FiltroDataPageModule } from '../filtro-data/filtro-data.module';
     FormsModule,
     IonicModule,
     GuiasPageRoutingModule,
-    FiltroDataPageModule
+    FiltroDataPageModule,
+    BrMaskerModule
   ],
   declarations: [GuiasPage]
 })

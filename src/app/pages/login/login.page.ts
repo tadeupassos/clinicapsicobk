@@ -40,7 +40,15 @@ export class LoginPage implements OnInit {
   logar(){
 
     if(this.fGroup.get('usuario').value == "fernando.lira"){
-      if(this.fGroup.get('senha').value == "insight20"){
+      if(this.fGroup.get('senha').value == "insight20fernando"){
+        window.localStorage.setItem("logado",this.fGroup.get('usuario').value);
+        this.fGroup.get('senha').setValue('');
+        this.navCtrl.navigateForward('/menu');
+      }else{
+        this.presentToast("Senha incorreta.")
+      }
+    }else if(this.fGroup.get('usuario').value == "secretaria.insight"){
+      if(this.fGroup.get('senha').value == "secretaria#20"){
         window.localStorage.setItem("logado",this.fGroup.get('usuario').value);
         this.fGroup.get('senha').setValue('');
         this.navCtrl.navigateForward('/menu');

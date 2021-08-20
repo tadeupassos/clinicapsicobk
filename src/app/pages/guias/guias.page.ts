@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { GuiaService } from 'src/app/services/guia.service';
 import { PacienteService } from 'src/app/services/paciente.service';
 import { FiltroDataPage } from '../filtro-data/filtro-data.page';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-guias',
@@ -14,26 +14,27 @@ import { ModalController } from '@ionic/angular';
 })
 export class GuiasPage implements OnInit {
 
-  private guia: Guia = {};
-  public pacienteId: string = null;
-  public convenioNome: string = null;
-  private guiasubscription: Subscription;  
-  public guias = new Array<Guia>();
-  public todasGuias = new Array<Guia>();
-  public mostrarBotaoCadastrar: boolean = false;
-  private pacienteSubscription: Subscription;
+  guia: Guia = {};
+  pacienteId: string = null;
+  convenioNome: string = null;
+  guiasubscription: Subscription;  
+  guias = new Array<Guia>();
+  todasGuias = new Array<Guia>();
+  mostrarBotaoCadastrar: boolean = false;
+  pacienteSubscription: Subscription;
   
-  public mostrarResumo = false;
-  public resumo = [];
-  public dataDe = "";
-  public dataAte = ""; 
-  public filtroEscolhido = "";
+  mostrarResumo = false;
+  resumo = [];
+  dataInicio = "";
+  dataFim = ""; 
+  filtroEscolhido = "";
 
   constructor(
     private activeRoute: ActivatedRoute,
     private guiaService: GuiaService,
     private pacienteService: PacienteService,
     private modalController: ModalController,
+    public toastController: ToastController
   ) {
 
     this.mostrarResumo = false;
@@ -61,19 +62,38 @@ export class GuiasPage implements OnInit {
 
   loadGuiasConvenio(){
     this.guiasubscription = this.guiaService.getGuias().subscribe(data => {
-      this.guias = data.filter(f => { return f.convenio == this.convenioNome });
+      this.todasGuias = data.filter(f => { 
+        return f.convenio == this.convenioNome 
+      }).sort((a,b) => {
+        let partA = a.dataInicio.split("/");
+        let partB = b.dataInicio.split("/");
+        let dtGuiaA = new Date(partA[2] + "-" + partA[1] + "-" + partA[0]);
+        let dtGuiaB = new Date(partB[2] + "-" + partB[1] + "-" + partB[0]) 
+        return dtGuiaA < dtGuiaB ? -1 : 1 
+      });
+      this.guias = this.todasGuias;
     });
   }
 
   loadGuiasPaciente(){
 
-    this.pacienteSubscription = this.pacienteService.getPaciente(this.pacienteId).subscribe((data:any) => {
+    this.pacienteSubscription = this.pacienteService.getPaciente(this.pacienteId)
+    .subscribe((data:any) => {
       this.convenioNome = data.nome;
     });
 
     this.guiasubscription = this.guiaService.getGuias().subscribe(data => {
-      this.guias = data.filter((f: Guia) => { return f.pacienteId == this.pacienteId });
-      this.todasGuias = this.guias;
+      this.todasGuias = data.filter((f: Guia) => { 
+        return f.pacienteId == this.pacienteId 
+      }).sort((a,b) => {
+        let partA = a.dataInicio.split("/");
+        let partB = b.dataInicio.split("/");
+        let dtGuiaA = new Date(partA[2] + "-" + partA[1] + "-" + partA[0]);
+        let dtGuiaB = new Date(partB[2] + "-" + partB[1] + "-" + partB[0]) 
+        return dtGuiaA < dtGuiaB ? -1 : 1 
+      });
+
+      this.guias = this.todasGuias;
     });
   }  
   
@@ -86,15 +106,13 @@ export class GuiasPage implements OnInit {
     ];
   }  
 
-
-
   async openModalfiltrar() {
     const modal = await this.modalController.create({
       component: FiltroDataPage,
       cssClass: "tamanho-modal-filtro",
       componentProps: { 
-        "dataDe" : this.dataAte,
-        "dataAte" : this.dataAte
+        "dataDe" : this.dataInicio,
+        "dataAte" : this.dataFim
       }
     });
   
@@ -114,11 +132,11 @@ export class GuiasPage implements OnInit {
         console.log("dataReturned.data.de",dataReturned.data.de);
         console.log("dataReturned.data.ate",dataReturned.data.ate);
 
-        this.dataDe = dataReturned.data.de;
-        this.dataAte = dataReturned.data.ate;
+        this.dataInicio = dataReturned.data.de;
+        this.dataFim = dataReturned.data.ate;
 
-        let partirDe = this.dataDe.split("/");
-        let partirAte = this.dataAte.split("/");
+        let partirDe = this.dataInicio.split("/");
+        let partirAte = this.dataFim.split("/");
 
         this.guias = this.guias.filter(f => {
 
@@ -139,5 +157,69 @@ export class GuiasPage implements OnInit {
  
     return await modal.present();
   } 
+
+  async filtrarPeriodo(){
+
+    let dataInicioPronta: any;
+    let dataFimPronta: any;
+    console.log("this.dataInicio", this.dataInicio);
+    console.log("this.dataFim", this.dataFim);
+    
+    if(this.dataInicio == "" && this.dataFim == ""){
+      const toast = await this.toastController.create({
+        message: 'Campos Data Início e Data Fim estão vazios.',
+        duration: 3000,
+        position: "middle"
+      });
+      toast.present();
+    }else{
+
+      if(this.dataInicio != ""){
+        console.log("this.dataInicio", this.dataInicio);
+        let partirA = this.dataInicio.split("/");
+        if(partirA.length < 3){
+          const toast = await this.toastController.create({
+            message: 'Data Início está incompleta.',
+            duration: 3000,
+            position: "top"
+          });
+          toast.present();
+        }else{
+          console.log("partirA",partirA);
+          dataInicioPronta = new Date(Number(partirA[2]), Number(partirA[1]) - 1, Number(partirA[0]));
+          console.log("dataInicioPronta", dataInicioPronta);
+        }
+      }
+      
+      if(this.dataFim != ""){
+        console.log("this.dataFim", this.dataFim);
+        let partirB = this.dataFim.split("/");
+        console.log("partirB",partirB);
+        if(partirB.length < 3){
+          const toast = await this.toastController.create({
+            message: 'Data Fim está incompleta.',
+            duration: 3000,
+            position: "top"
+          });
+          toast.present();
+        }else{
+          dataFimPronta = new Date(Number(partirB[2]), Number(partirB[1]) - 1, Number(partirB[0]));
+          console.log("dataFimPronta", dataFimPronta);
+        }
+      }
+
+      this.guias = this.todasGuias.filter(f => {
+        let [dia, mes, ano] = f.dataInicio.split("/");
+        let dtGuia = new Date(Number(ano), Number(mes) - 1, Number(dia));
+        if(dataInicioPronta && dataFimPronta){
+          return dtGuia > dataInicioPronta && dtGuia < dataFimPronta
+        }else if(dataInicioPronta){
+          return dtGuia > dataInicioPronta 
+        }else if(dataFimPronta){
+          return dtGuia < dataFimPronta 
+        }
+      });
+    }
+  }
 
 }

@@ -160,6 +160,15 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'fechamento',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../fechamento/fechamento.module').then( m => m.FechamentoPageModule)
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: '/menu/pacientes',
         pathMatch: 'full'

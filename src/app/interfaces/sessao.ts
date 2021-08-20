@@ -11,10 +11,15 @@ export interface Sessao {
     dia?: string;
     mes?: string;
     ano?: string;
+    dataSessaoStamp?: number; 
     horaSessao?: string;
     frequencia?: string;
+    evolucao?: string;
     conteudo?: string;
     outros?: string;
-    evolucao?: string;
     userId?: string;
+    atendimento?: string;
+    valor?: string;
+    nomeConvenio?: string;
+    dtTimeStamp?: string;
 }

@@ -35,15 +35,15 @@ n
     return this.prontuariosCollection.add(novoProntuario);
   }
 
-   getProntuario(id: string){
+  getProntuario(id: string){
     return this.prontuariosCollection.doc<Prontuario>(id).valueChanges();
   }
 
-   updateProntuario(id: string, prontuario: Prontuario){
+  updateProntuario(id: string, prontuario: Prontuario){
     return this.prontuariosCollection.doc<Prontuario>(id).update(prontuario);
   }
 
-   deleteProntuario(id: string){
+  deleteProntuario(id: string){
     return this.prontuariosCollection.doc(id).delete();
   }  
 }

@@ -24,7 +24,7 @@
               <span class="labels">Dia: </span> <span class="dados">{{ s.diaSemana }}</span>
               <span class="labels"> - Horário: </span> <span class="dados">{{ s.horaSessao }}</span>
             </h2>
-            <h3><span class="labels">Número da Guia: </span> <span class="dados">{{ s.numeroGuia }}</span></h3>
+            <h3 *ngIf="s.numeroGuia != ''" ><span class="labels">Número da Guia: </span> <span class="dados">{{ s.numeroGuia }}</span></h3>
             <!-- <h3><span class="labels">Paciente: </span><span class="dados">{{ s.nomePaciente }} </span></h3> -->
             <h2><span class="labels">Psicólogo: </span> <span class="dados">{{ s.psicologo }}</span></h2>
           </ion-label>

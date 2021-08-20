@@ -1,0 +1,162 @@
+<ion-content>
+  <div class="filtro">
+
+    <ion-row>
+      <ion-col size="3">
+        <ion-row>
+          <ion-col class="flex-right" size="3">
+            Início
+          </ion-col>
+          <ion-col class="flex-flex" size="9">      
+            <ion-input [(ngModel)]="filtro.inicio" type="date" class="dataFiltro"></ion-input>
+          </ion-col>
+        </ion-row> 
+      
+        <ion-row>
+          <ion-col class="flex-right" size="3">
+            Fim
+          </ion-col>
+          <ion-col class="flex-flex" size="9">      
+            <ion-input [(ngModel)]="filtro.fim" type="date" class="dataFiltro"></ion-input>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+      <ion-col size="2">
+        <ion-text><h5>Tipo Atendimento</h5></ion-text>
+        <select [(ngModel)]="filtro.atendimento" class="campo selecionar" 
+        (ngModelChange)="filtro.atendimento != 'Convênio' ? filtro.convenio = 'Todos' : null">
+          <option value="Todos" selected>Todos</option>
+          <option value="Convênio">Convênio</option>
+          <option value="Particular">Particular</option>
+        </select>
+      </ion-col>
+      <ion-col [ngStyle]="{ 'opacity' : filtro.atendimento == 'Convênio' ? '1' : '0.2'}" size="2">
+        <ion-text><h5>Convênio</h5></ion-text>
+        <select 
+          [(ngModel)]="filtro.convenio" 
+          class="campo selecionar" 
+          [disabled]="filtro.atendimento == 'Todos' || filtro.atendimento == 'Particular'"
+        >
+          <option value="Todos" selected>Todos</option>
+          <option *ngFor="let c of convenios" [value]="c.convenio">{{ c.convenio }}</option>
+        </select>
+      </ion-col>
+      <ion-col size="3">
+        <ion-text><h5>Psicólogo</h5></ion-text>
+        <select [(ngModel)]="filtro.psicologo" style="width: 300px;" class="campo">
+          <option value="Todos" selected>Todos</option>
+          <option *ngFor="let p of psicologos" [value]="p.crp">{{ p.nome }}</option>
+        </select>
+      </ion-col>
+      <ion-col style="padding: 20px" size="2">
+        <ion-button class="btnFiltrar" (click)="filtrar()" expand="block" color="success">
+          Filtrar
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <ion-row>
+    <ion-col size="4">
+      <div class="box" style="border: 2px solid #475F94;">
+        <span class="titulo corP">Particular</span>
+        <ion-row>
+          <ion-col class="sessoes flex-center corP" size="3">
+            Qtde
+          </ion-col>
+          <ion-col class="sessoes flex-center corP" size="4">
+            Valor
+          </ion-col>
+          <ion-col class="flex-center corP" size="5">
+            <span style="font-size: 15px; font-weight: 600;" class="sessoes">Sublocação</span>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col class="valorSub flex-center" size="3">
+            {{particular.qtde}}
+          </ion-col>
+          <ion-col class="valorSub flex-center" size="4">
+            {{ particular.valor | currency:'BRL' }}
+          </ion-col>
+          <ion-col class="flex-center" size="5">
+            <span class="valorSub">{{ particular.subLocacao | currency:'BRL' }}</span> 
+           </ion-col>
+        </ion-row>
+      </div>
+    </ion-col>
+    <ion-col size="8">
+      <div style="margin-right: 40px; border: 2px solid #048243" class="box">
+        <span class="titulo corC">Convênio</span>
+        <ion-row>
+          <ion-col size="6" class="ion-no-padding">
+            <ion-row>
+              <ion-col class="sessoes corC" size="4">
+                Qtde
+              </ion-col>
+              <ion-col class="sessoes flex-center corC" size="4">
+                Valor
+              </ion-col>
+              <ion-col class="flex-center corC" size="4">
+                <span style="font-size: 15px; font-weight: 600;" class="sessoes">Repasse</span>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col class="valorSub flex-center" size="4">
+                {{convenio.qtde}}
+              </ion-col>
+              <ion-col class="valorSub flex-center" size="4">
+                {{ convenio.valor | currency:'BRL' }}
+              </ion-col>
+              <ion-col class="flex-center" size="4">
+                <span class="valorSub">{{ convenio.repasse | currency:'BRL' }}</span> 
+              </ion-col>
+            </ion-row>
+          </ion-col>
+          <ion-col size="6">
+            <ion-chip class="tags" *ngFor="let c of convAtend" color="dark">
+              <strong>{{ c.qtde }}</strong>&nbsp; {{ c.convenio }}
+            </ion-chip>
+           </ion-col>
+        </ion-row>
+      </div>
+    </ion-col>
+  </ion-row>
+
+  <ion-row style="margin: 0px 40px 40px 12px;">
+    <ion-col *ngFor="let r of resumo" size="3">
+      <div class="cartao">
+        <div class="nome">
+          {{ r.nome }}
+        </div>
+        <ion-row class="tituloCartao">
+          <ion-col size="2"></ion-col>
+          <ion-col class="flex-center" size="2">Qtde</ion-col>
+          <ion-col class="flex-center" size="5">Valor</ion-col>
+          <ion-col class="flex-center" size="3">R/S</ion-col>
+        </ion-row>
+        <ion-row class="tituloCartao" style="border-top: 1px solid gray;">
+          <ion-col class="corP" size="2">Part.</ion-col>
+          <ion-col class="corP flex-center" size="2">{{ r.qtdeParticular }}</ion-col>
+          <ion-col class="corP flex-center" size="5">{{ r.valorParticular | currency:'BRL' }}</ion-col>
+          <ion-col class="corP flex-center" size="3">{{ r.subLocacao | currency:'BRL' }}</ion-col>
+        </ion-row>
+        <ion-row class="tituloCartao" style="border-top: 1px solid gray;">
+          <ion-col class="corC" size="2">Conv.</ion-col>
+          <ion-col class="corC flex-center" size="2">{{ r.qtdeConvenio }}</ion-col>
+          <ion-col class="corC flex-center" size="5">{{ r.valorConvenio | currency:'BRL' }}</ion-col>
+          <ion-col class="corC flex-center" size="3">{{ r.repasse | currency:'BRL' }}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-chip class="tags" *ngFor="let c of r.convenios" color="dark">
+              <strong>{{ c.qtde }}</strong>&nbsp; {{ c.convenio }}
+            </ion-chip>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-col>
+  </ion-row>
+
+
+</ion-content>

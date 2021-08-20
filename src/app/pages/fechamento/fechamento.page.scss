@@ -1,0 +1,94 @@
+.dataFiltro {
+    width: 190px;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.campo {
+    border-radius: 7px !important;
+    padding-left: 5px !important;
+    height: 50px;
+    font-size: 22px;
+}
+
+.selecionar {
+    width: 180px;
+}
+
+.btnFiltrar {
+    height: 80px;
+    font-size: 20px;
+}
+
+.filtro {
+    border: 3px solid #d7d8da;
+    margin: 10px;
+    border-radius: 20px;
+}
+
+.box {
+    border-radius: 6px;
+    height: 78px;
+    margin: 12px;
+    position: relative;
+    margin-top: 30px;
+}
+
+.titulo {
+    background-color: white;
+    position: absolute;
+    top: -11px;
+    left: 20px;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.sessoes {
+    font-size: 18px;
+    text-align: center;
+    padding: 13px 15px 0px;
+    color: #3818a2;
+}
+
+.valor {
+    font-size: 19px;
+    color: #166f3a;
+    padding-top: 10px;
+}
+
+.valorSub {
+    font-size: 18px;
+    color: gray;
+}
+
+.cartao {
+    border-radius: 10px;
+    box-shadow: 0 0px 20px 0 rgb(63 55 96 / 15%);
+    padding: 15px;
+
+    .nome{
+        font-size: 15px;
+        color: #3F012C;
+        font-weight: bold;
+    }
+
+    .tituloCartao {
+        font-size: 15px;
+    }
+}
+
+.corP {
+    color: #475F94
+}
+
+.corC {
+    color: #048243
+}
+
+.tags {
+    height: 21px; 
+    font-size: 12px;
+}
+

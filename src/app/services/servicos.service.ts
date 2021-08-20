@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LoadingController, ToastController } from '@ionic/angular';
+import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -7,12 +9,15 @@ import { LoadingController, ToastController } from '@ionic/angular';
 export class ServicosService {
 
   public loading: any;
+  private cobrancaCollection: AngularFirestoreCollection<any>;
+  public cobranca: any;
 
   constructor(
     private loadingCtrl: LoadingController,
-    private toastCrtl: ToastController
+    private toastCrtl: ToastController,
+    private afs: AngularFirestore
   ) {
-    
+    this.cobrancaCollection = this.afs.collection<any>('Fernando');
   }
 
   public async presentLoading(){
@@ -40,5 +45,17 @@ export class ServicosService {
   //   return dados;
   // }  
 
+  getCobranca(){
+    return this.cobrancaCollection.snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+
+          return {id, ...data };
+        });
+      })
+    )
+  } 
 
 }

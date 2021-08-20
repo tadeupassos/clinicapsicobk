@@ -2,8 +2,24 @@
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
-    </ion-buttons>     
-    <ion-title>Guias - {{ convenioNome }}</ion-title>
+    </ion-buttons> 
+    <ion-row>  
+      <ion-col size="3" class="flex-center">
+        <ion-title>Guias - {{ convenioNome }}</ion-title>
+      </ion-col>
+      <!-- [brmasker]="{mask:'00/00/00', len:8}" -->
+      <ion-col size="2" class="flex-left">
+        <input [(ngModel)]="dataInicio" type="text" class="campo" placeholder="Data Início" [brmasker]="{mask:'00/00/00', len:10}">
+        &nbsp;
+        &nbsp;
+        <input [(ngModel)]="dataFim" type="text" placeholder="Data Fim" class="campo" [brmasker]="{mask:'00/00/00', len:10}">
+      </ion-col>   
+      <ion-col size="2" class="flex-center">
+        <ion-button expand="block" (click)="filtrarPeriodo()">
+          Filtrar Período
+        </ion-button>
+      </ion-col>                  
+    </ion-row>
   </ion-toolbar>
 </ion-header>
 
@@ -14,25 +30,33 @@
     </ion-fab-button>
   </ion-fab>
   
-  <ion-row>
+  <!-- <ion-row>
     <ion-col size="3">
       <ion-button (click)="openModalfiltrar()" expand="block" >
         Filtro{{ filtroEscolhido }}
       </ion-button>
     </ion-col> 
-  </ion-row>
+  </ion-row> -->
 
   <ion-grid>
     <ion-row>
       <ion-col *ngFor="let g of guias" size="auto" >
         <ion-card button class="ion-padding" [routerLink]="['/menu/cadguia','guia',g.id]" >
           <ion-label>
-            <h2><span class="labels">Número da Guia: </span> <span class="dados">{{ g.numeroGuia }}</span></h2>
-            <h2><span class="labels">Paciente: </span> <span class="dados">{{ g.nomePaciete }}</span></h2>
-            <h3><span class="labels">Data Início: </span><span class="dados">{{ g.dataInicio }} </span></h3>
+            <h2>
+              <span class="labels">Número da Guia: </span> <span class="dados">{{ g.numeroGuia }}</span>
+            </h2>
+            <h2>
+              <span class="labels">Paciente: </span> <span class="dados">{{ g.nomePaciete }}</span>
+            </h2>
+            <h3>
+              <span class="labels">Data Início: </span><span class="dados">{{ g.dataInicio }} </span>
+            </h3>
             <!-- <h3><span class="labels">Data Fim: </span> <span class="dados">{{ g.dataFim }}</span></h3> -->
-            <h2><span class="labels">Qtde Sessões: </span> <span class="dados">{{ g.qtdeSessoes }}</span></h2>
-            <h2><span class="labels">Psicólogo: </span><span class="dados">{{ g.nomePsicologo }}</span> </h2>
+            <!-- <h2><span class="labels">Qtde Sessões: </span> <span class="dados">{{ g.qtdeSessoes }}</span></h2> -->
+            <h2>
+              <span class="labels">Psicólogo: </span><span class="dados">{{ g.nomePsicologo }}</span>
+            </h2>
           </ion-label>
         </ion-card> 
       </ion-col>

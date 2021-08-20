@@ -3,19 +3,35 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>   
-    <ion-title>Pacientes</ion-title>
+    <ion-row>
+      <ion-col size="2" class="flex-center">
+        <!-- &nbsp; -->
+        <ion-title>
+          Pacientes <span class="totalPaciente">{{ totalPacientes }}</span>
+        </ion-title>  
+      </ion-col>
+      <ion-col size="10" class="flex-left">
+        <div class="filtrarPsicologo">
+          <ion-text>Psicólogo:</ion-text>
+          <select [(ngModel)]="filtrarPsicologo" class="campo"  (ngModelChange)="setaFiltroPsico()">
+            <option value="Todos" selected>Todos</option>
+            <option *ngFor="let p of psicologos" [value]="p.nome">{{ p.nome }}</option>
+          </select>
+        </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <ion-searchbar class="fundosearch" (ionInput)="filtrarPorLetra($event)" placeholder="Buscar por nome do paciente">
+        </ion-searchbar> 
+      </ion-col>
+    </ion-row>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <!-- <ion-searchbar class="fundosearch" [(ngModel)]="buscaLetra" (ionInput)="filtrarPorLetra()" placeholder="Buscar por nome do paciente">
-  </ion-searchbar>  -->
 
-  <ion-fab [routerLink]="['/menu/cadpaciente']" horizontal="end" vertical="top" slot="fixed" edge style=" margin-right: 50px">
+  <!-- <ion-fab [routerLink]="['/menu/cadpaciente']" horizontal="end" vertical="top" slot="fixed" edge style=" margin-right: 50px">
     <ion-fab-button color="success" ion-fab>
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
-  </ion-fab>    
+  </ion-fab>     -->
 
   <ion-grid>
     <ion-row class="cartao">
@@ -25,7 +41,7 @@
               <button class="botao nome" [routerLink]="['/menu/cadpaciente',p.id]">
                 {{ p.nome }}
               </button>
-              <button class="botao prontuario" [routerLink]="['/menu/prontuario',p.id]">
+              <button *ngIf="permissao" class="botao prontuario" [routerLink]="['/menu/prontuario',p.id]">
                 Prontuário
               </button>              
               <button class="botao sessoes" [routerLink]="['/menu/sessoes',p.id]">

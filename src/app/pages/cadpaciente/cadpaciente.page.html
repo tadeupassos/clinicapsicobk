@@ -43,7 +43,27 @@
         <!-- <div class="mensagemValidacao" *ngIf="fGroup.controls.valor.errors">
           <span *ngIf="fGroup.controls.valor.errors.required && fGroup.controls.valor.touched">Esse campo é obrigatório</span>
         </div>         -->
-      </ion-col>      
+      </ion-col>    
+      <ion-col size="6">
+        <div *ngIf="pacienteId != null" class="cartaoEncerrou">
+          <span class="encerrou">Encerrou Atendimento</span>
+            <div class="flex-left">
+              &nbsp;
+              &nbsp;
+              <span class="tituloEncerrou">Data:</span>&nbsp;<ion-input type="text" maxlength="10" formControlName="dataEncerrou" class="campo" (keypress)="dataEncerrouMascara($event)"></ion-input>
+              &nbsp;
+              &nbsp;
+              <span class="tituloEncerrou">Motivo:</span>&nbsp; 
+              <select formControlName="motivoEncerrou" class="campo tamanhoMotivo selecionar">
+                <option value="Alta" selected>Alta</option>
+                <option value="Parou">Parou</option>
+              </select>
+              &nbsp;
+              &nbsp;
+              &nbsp;
+            </div>
+        </div>
+      </ion-col>       
     </ion-row>
 
     <ion-row class="margemLinha">
@@ -144,7 +164,7 @@
     <ion-row class="margemLinha">    
       <ion-col size="3">
         <ion-text><h5>Psicólogo <ion-text color="danger">*</ion-text></h5></ion-text>
-        <select formControlName="psicologo" class="campo">
+        <select formControlName="psicologo" class="campo" (ngModelChange)="setarCPR($event)">
           <option *ngFor="let p of psicologos" [value]="p.nome" selected>{{ p.nome }}</option>
         </select>
         <div class="mensagemValidacao" *ngIf="fGroup.controls.psicologo.errors">
@@ -159,7 +179,7 @@
         </div>         
       </ion-col>                 
     </ion-row>   
-    <br>
+
     <br>
     <ion-row>
       <ion-col size="9">
@@ -171,6 +191,11 @@
         
       </ion-col>
     </ion-row>
+    <br>
+    <br>
+    <ion-button color="danger" (click)="deletar()" shape="round">
+      deletar  
+    </ion-button>
 
   </form>
 </ion-content>

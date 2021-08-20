@@ -7,6 +7,8 @@ export interface Paciente {
     atendimento?: string;
     convenio?: string;
     valor?: string;
+    dataEncerrou?: string;
+    motivoEncerrou?: string;
     nome?: string;
     email?: string;
     dataNascimento?: string;

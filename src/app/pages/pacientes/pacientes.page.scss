@@ -1,5 +1,5 @@
 .fundosearch {
-    width: 70%;
+    width: 420px;
 }
 
 .borda {
@@ -72,5 +72,28 @@
 
 .linhaDebaixo {
     border-bottom: 2px solid var(--ion-color-primary);
+}
+
+.campo {
+    background-color: var(--ion-color-primary);
+    margin-left: 5px;
+    border: 1px solid white;
+    border-radius: 2px;
+    padding: 2px;
+}
+
+.filtrarPsicologo {
+    font-size: 16px;
+    border: 1px solid white;
+    border-radius: 3px;
+    padding: 8px;
+}
+
+.totalPaciente {
+    color: var(--ion-color-primary);
+    font-size: 16px;
+    background-color: #fff;
+    border-radius: 3px;
+    padding: 3px;
 }
 

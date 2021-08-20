@@ -49,15 +49,6 @@ export class CadpacientePage implements OnInit {
     private psicologoService: PsicologoService
   ) {
 
-    this.pacienteService.getPacientes().subscribe((res: Array<Paciente>) => {
-      if(res.length > 0){
-        this.novoCodigo = res.reduce((p,c) => p.prontuario.codigo > c.prontuario.codigo ? p : c).prontuario.codigo;
-      }else{
-        this.novoCodigo = 100;
-      }
-      console.log("novoCodigo:",this.novoCodigo);
-    });
-
     this.convenioSubscription = this.convenioService.getConvenios().subscribe(data => {
       this.convenios = data;
       //console.log(data);
@@ -68,15 +59,13 @@ export class CadpacientePage implements OnInit {
       //console.log(data);
     });    
 
-    this.pacienteId = this.activeRoute.snapshot.params['id'];
-
-    if(this.pacienteId) this.loadPaciente();
-
     this.fGroup = this.fBuilder.group({
       'dataInicio': [this.paciente.dataInicio, Validators.compose([Validators.required])],
       'atendimento': [this.paciente.atendimento, Validators.compose([Validators.required])],
-      'convenio': [this.paciente.atendimento],
+      'convenio': [this.paciente.convenio],
       'valor': [this.paciente.valor],
+      'dataEncerrou': [this.paciente.dataEncerrou],
+      'motivoEncerrou': [this.paciente.motivoEncerrou],
       'nome': [this.paciente.nome, Validators.compose([Validators.required,])],
       'email': [this.paciente.email], //Validators.compose([Validators.required,Validators.pattern(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/)])],
       'dataNascimento': [this.paciente.dataNascimento, Validators.compose([Validators.required])],
@@ -93,31 +82,33 @@ export class CadpacientePage implements OnInit {
       'psicologo': [this.paciente.psicologo, Validators.compose([Validators.required])],
       'crp': [this.paciente.crp, Validators.compose([Validators.required])]
     });
+
+    this.pacienteId = this.activeRoute.snapshot.params['id'];
+    if(this.pacienteId){
+      this.loadPaciente();
+    }else{
+      this.pacienteService.getPacientes().subscribe((res: Array<Paciente>) => {
+        if(res.length > 0){
+          this.novoCodigo = res.reduce((p,c) => p.prontuario.codigo > c.prontuario.codigo ? p : c).prontuario.codigo;
+        }else{
+          this.novoCodigo = 100;
+        }
+        console.log("novoCodigo:",this.novoCodigo);
+      });
+    } 
   }
 
   ngOnInit() {
 
-    // this.fGroup.get("atendimento").valueChanges.subscribe(item => {
-    //   if(item == "Convênio"){
-    //     this.fGroup.get("valor").clearValidators();
-    //     this.fGroup.get("convenio").setValidators([Validators.compose([Validators.required])]);
-    //     console.log("clear em valor, setando convenio");
-    //   }else{
-    //     this.fGroup.get("convenio").clearValidators();
-    //     this.fGroup.get("valor").setValidators([Validators.compose([Validators.required])]);
-    //     console.log("clear em convenio, setando valor");
-    //   }
+    // this.fGroup.get("psicologo").valueChanges.subscribe(item => {
+    //   let nomes = this.psicologos;
+    //   nomes.filter(c => {
+    //     return c.nome == item;
+    //   }).map(c => {
+    //     this.fGroup.get("crp").setValue(c.crp);
+    //     console.log("mudou psicologo",c.crp)
+    //   });
     // });
-
-    this.fGroup.get("psicologo").valueChanges.subscribe(item => {
-      let nomes = this.psicologos;
-      nomes.filter(c => {
-        return c.nome == item;
-      }).map(c => {
-        this.fGroup.get("crp").setValue(c.crp);
-      });
-
-    });
 
   }
 
@@ -128,17 +119,19 @@ export class CadpacientePage implements OnInit {
   }
 
   loadPaciente(){
-
     this.mostrarBotaoExcluir = false;
-
     this.pacienteSubscription = this.pacienteService.getPaciente(this.pacienteId).subscribe(data => {
       this.paciente = data;
+      
+      console.log("this.paciente",this.paciente);
 
       this.fGroup = this.fBuilder.group({
         'dataInicio': [this.paciente.dataInicio, Validators.compose([Validators.required])],
         'atendimento': [this.paciente.atendimento, Validators.compose([Validators.required])],
-        'convenio': [this.paciente.atendimento],
+        'convenio': [this.paciente.convenio],
         'valor': [this.paciente.valor],
+        'dataEncerrou': [this.paciente.dataEncerrou],
+        'motivoEncerrou': [this.paciente.motivoEncerrou],
         'nome': [this.paciente.nome, Validators.compose([Validators.required,])],
         'email': [this.paciente.email], //Validators.compose([Validators.required,Validators.pattern(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/)])],
         'dataNascimento': [this.paciente.dataNascimento, Validators.compose([Validators.required])],
@@ -161,7 +154,6 @@ export class CadpacientePage implements OnInit {
       }else{
         this.fGroup.get("valor").setValidators([Validators.compose([Validators.required])]);
       }
-
     });
   }
 
@@ -201,6 +193,24 @@ export class CadpacientePage implements OnInit {
     
   }  
 
+  dataEncerrouMascara(event){
+    let digito = event.key;
+
+    if(isNaN(parseInt(digito)) || digito == "." || digito == " " || digito == "/"){
+      return false;
+    }else{
+      let data: string = (this.fGroup.value.dataEncerrou) ? this.fGroup.value.dataEncerrou : "";
+
+      if(data.length == 1 || data.length == 4){
+        data = data + digito + "/";
+        
+        this.fGroup.get('dataEncerrou').setValue(data);
+        return false
+      }
+    }
+    
+  }
+
   formatarValor(event) {
 
     let digito = event.key;
@@ -237,13 +247,10 @@ export class CadpacientePage implements OnInit {
     let cep = this.fGroup.value.cep;
 
     if(cep.length == 8){	
-    
       //Expressão regular para validar o CEP.
       var validacep = /^[0-9]{8}$/;
-
       //Valida o formato do CEP.
       if(validacep.test(cep)) {
-
         this.mostrarSpinner = true;
 
         this.http.get("https://viacep.com.br/ws/" + cep + "/json/")
@@ -342,6 +349,25 @@ export class CadpacientePage implements OnInit {
         this.servicos.loading.dismiss();
       }
     }
+  }
+
+  setarCPR(selecionado){
+    //console.log("mudou psicologo",selecionado);
+    let nomes = this.psicologos;
+      nomes.filter(c => {
+      return c.nome == selecionado;
+    }).map(c => {
+      this.fGroup.get("crp").setValue(c.crp);
+      //console.log("mudou psicologo",c.crp)
+    });
+  }
+
+
+  async deletar(){
+    await this.servicos.presentLoading();
+    await this.pacienteService.deletePaciente(this.pacienteId);
+    await this.servicos.loading.dismiss();
+    this.navCtrl.navigateBack('/menu/pacientes');
   }
 
 }

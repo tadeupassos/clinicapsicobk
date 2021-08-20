@@ -43,6 +43,43 @@ export class SessaoService {
 
    deleteSessao(id: string){
     return this.sessoesCollection.doc(id).delete();
-  }  
+  }
+  
+  getSessaoPorFiltro(f:any){
+
+    let [ano,mes,dia] = f.inicio.split("-");
+    let inicio = new Date(Number(ano),Number(mes) -1 ,Number(dia),0,0,0).getTime();
+
+    [ano,mes,dia] = f.fim.split("-");
+    let fim = new Date(Number(ano),Number(mes) -1 ,Number(dia),0,0,0).getTime();
+
+    let query = this.afs.collection<Sessao>('Sessoes').ref
+    .where('dataSessaoStamp', '>=', inicio)
+    .where('dataSessaoStamp', '<=', fim);
+
+    if(f.atendimento != "Todos"){
+      query = query.where('atendimento', '==', f.atendimento);
+    }
+
+    if(f.convenio != "Todos"){
+      query = query.where('nomeConvenio', '==', f.convenio);
+    }
+
+    if(f.psicologo != "Todos"){
+      query = query.where('crp', '==', f.psicologo);
+    }
+
+    return this.afs.collection<Sessao>('Sessoes', ref => query)
+    .snapshotChanges()
+    .pipe(
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        })
+      })
+    )
+  }
 
 }

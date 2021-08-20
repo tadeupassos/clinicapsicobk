@@ -29,19 +29,19 @@ export class PacienteService {
     )
    }  
 
-   addPaciente(paciente: Paciente){
-      return this.pacientesCollection.add(paciente);
-   }
+  addPaciente(paciente: Paciente){
+    return this.pacientesCollection.add(paciente);
+  }
 
-   getPaciente(id: string){
+  getPaciente(id: string){
     return this.pacientesCollection.doc<Paciente>(id).valueChanges();
-   }
+  }
 
-   updatePaciente(id: string, paciente: Paciente){
+  updatePaciente(id: string, paciente: Paciente){
     return this.pacientesCollection.doc<Paciente>(id).update(paciente);
-   }
+  }
 
-   deletePaciente(id: string){
+  deletePaciente(id: string){
     return this.pacientesCollection.doc(id).delete();
-   }
+  }
 }

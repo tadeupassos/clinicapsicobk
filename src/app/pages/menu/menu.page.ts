@@ -26,6 +26,10 @@ export class MenuPage implements OnInit {
     {
       title: 'Psicólogos',
       url: '/menu/psicologos'
+    },
+    {
+      title: 'Fechamento',
+      url: '/menu/fechamento'
     }
   ];
 

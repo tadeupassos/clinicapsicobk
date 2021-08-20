@@ -230,14 +230,9 @@ export class CadguiaPage implements OnInit {
     try {
       await this.sessaoService.addSessao(sessao);
 
-      //console.log("sessao 1:", JSON.stringify(sessao));
-
       for (let index = 2; index <= parseInt(this.guia.qtdeSessoes); index++) {
 
         let proximaData = dataGerada.setDate(dataGerada.getDate() + 7);
-  
-        //console.log("dataGerada.setDate:",dataGerada);
-  
         let dia = new Date(proximaData).getDate();
         let mes = new Date(proximaData).getMonth() + 1;
         let ano = new Date(proximaData).getFullYear();
@@ -262,7 +257,6 @@ export class CadguiaPage implements OnInit {
   
         try {
           await this.sessaoService.addSessao(sessao);
-          //console.log("sessao " + index + ":", JSON.stringify(sessao));
         } catch (error) {
           console.log("addSessao(sessao) " + index + ":",error);
         }
@@ -278,22 +272,17 @@ export class CadguiaPage implements OnInit {
     let qtdeSessoes: number = (this.fGroup.value.qtdeSessoes) ? parseInt(this.fGroup.value.qtdeSessoes) : 0;
 
     if(data){
-
       if(qtdeSessoes <= 0 ){
         this.fGroup.controls.qtdeSessoes.setErrors({ required: true });
         this.qtdeSessoes.setFocus();
       }else if(qtdeSessoes == 1){
         this.fGroup.get('dataFim').setValue(this.fGroup.value.dataInicio);
       }else{
-        
         let dia = parseInt(this.fGroup.value.dataInicio.substr(0,2));
         let mes = parseInt(this.fGroup.value.dataInicio.substr(3,2));
         let ano = parseInt(this.fGroup.value.dataInicio.substr(6,4));
         let dataGerada  = new Date(ano,mes - 1,dia,0,0,0);
-        //console.log("data Iniciio:", dataGerada);
-
         let subtrair = (qtdeSessoes == 1) ? 0 : 1;
-
         let qtdeDias = (qtdeSessoes - subtrair) * 7;
         dataGerada.setDate(dataGerada.getDate() + qtdeDias);
         //console.log("data fim:", dataGerada.toLocaleDateString());

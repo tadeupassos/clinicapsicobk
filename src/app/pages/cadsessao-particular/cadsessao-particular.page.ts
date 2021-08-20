@@ -181,23 +181,12 @@ export class CadsessaoParticularPage implements OnInit {
 
     try {
       await this.sessaoService.addSessao(sessao);
-
       await this.loading.dismiss();
-
       this.router.navigateByUrl('/menu/sessoes/' + this.pacienteId);
-
-      // if(this.fGroup.value.qtdeSessoes == 1){
-      //   await this.modalController.dismiss();
-      // }
-
-      //console.log("sessao 1:", JSON.stringify(sessao));
 
       for (let index = 2; index <= parseInt(this.fGroup.value.qtdeSessoes); index++) {
 
         let proximaData = dataGerada.setDate(dataGerada.getDate() + 7);
-  
-        //console.log("dataGerada.setDate:",dataGerada);
-  
         let dia = new Date(proximaData).getDate();
         let mes = new Date(proximaData).getMonth() + 1;
         let ano = new Date(proximaData).getFullYear();
@@ -207,13 +196,15 @@ export class CadsessaoParticularPage implements OnInit {
           nomePaciente: this.nomePaciente,
           numeroGuia: "",
           psicologo: this.psicologo,
+          crp: this.crp,
           dataSessao: dia + "/" + mes + "/" + ano,
           diaSemana: this.fGroup.value.diaSemana,
           dia: dia.toString(),
           mes: mes.toString(),
           ano: ano.toString(),       
-          //dataSessaoStamp: proximaData, 
           horaSessao: this.fGroup.value.hora,
+          frequencia: "",
+          conteudo: "",
           evolucao: "",
           userId: "100"
         }

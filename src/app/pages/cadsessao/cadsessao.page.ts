@@ -6,7 +6,6 @@ import { ActivatedRoute } from '@angular/router';
 import { ServicosService } from 'src/app/services/servicos.service';
 import { NavController } from '@ionic/angular';
 import { SessaoService } from 'src/app/services/sessao.service';
-import { PacienteService } from 'src/app/services/paciente.service';
 
 @Component({
   selector: 'app-cadsessao',
@@ -25,8 +24,6 @@ export class CadsessaoPage implements OnInit {
   public psicologo = "";
   public numeroGuia = "";
 
-  //private pacienteSubscription: Subscription;  
-
   constructor(
     private fBuilder: FormBuilder,
     private activeRoute: ActivatedRoute,
@@ -34,13 +31,7 @@ export class CadsessaoPage implements OnInit {
     private servicos: ServicosService,
     private navCtrl: NavController
   ) { 
-
-    // if(this.activeRoute.snapshot.params['parametro'] == "novo"){
-
-    // }else{
-      this.sessaoId = this.activeRoute.snapshot.params['id'];
-    //}
-
+    this.sessaoId = this.activeRoute.snapshot.params['id'];
     console.log("this.sessaoId",this.sessaoId);
 
     if(this.sessaoId) this.loadSessao();
@@ -58,7 +49,6 @@ export class CadsessaoPage implements OnInit {
 
   ngOndestroy() {
     if(this.sessaoSubscription) this.sessaoSubscription.unsubscribe();
-    //if(this.pacienteSubscription) this.pacienteSubscription.unsubscribe();
   }  
 
   loadSessao(){
@@ -81,46 +71,15 @@ export class CadsessaoPage implements OnInit {
     await this.servicos.presentLoading();
     this.sessao = this.fGroup.value;
     this.sessao.userId = "100";    
-
     console.log("this.sessao",this.sessao);
-
-    if(this.sessaoId){
-      try {
-        await this.sessaoService.updateSessao(this.sessaoId, this.sessao);
-        await this.servicos.loading.dismiss();
-
-        this.navCtrl.navigateBack('/menu/sessoes/' + this.sessao.pacienteId);
-      } catch (error) {
-        this.servicos.presentToast('Erro ao tentar salvar');
-        this.servicos.loading.dismiss();
-      }
-    }else{
-      // try {
-      //   let splitDt = this.sessao.dataSessao.split("/"); 
-
-      //   this.sessao.pacienteId = this.pacienteId;
-      //   this.sessao.nomePaciente = this.nomePaciente;
-      //   this.sessao.numeroGuia = "";
-      //   this.sessao.psicologo = this.psicologo;
-      //   this.sessao.crp = this.psicologo
-      //   this.sessao.dia = splitDt[0];
-      //   this.sessao.mes = splitDt[1];
-      //   this.sessao.ano = splitDt[2];
-      //   this.sessao.frequencia = "";
-      //   this.sessao.conteudo = "";
-      //   this.sessao.evolucao = "";
-
-      //   console.log("sessao antes de gravar:",this.sessao);
-
-      //   await this.sessaoService.addSessao(this.sessao);
-      //   await this.servicos.loading.dismiss();
-
-      //   this.navCtrl.navigateBack('/menu/sessoes/' + this.pacienteId);
-      // } catch (error) {
-      //   console.log("erro ao gravar sessao:",error);
-      //   this.servicos.presentToast('Erro ao tentar salvar');
-      //   this.servicos.loading.dismiss();
-      // }
+    
+    try {
+      await this.sessaoService.updateSessao(this.sessaoId, this.sessao);
+      await this.servicos.loading.dismiss();
+      this.navCtrl.navigateBack('/menu/sessoes/' + this.sessao.pacienteId);
+    } catch (error) {
+      this.servicos.presentToast('Erro ao tentar salvar');
+      this.servicos.loading.dismiss();
     }
   }
   

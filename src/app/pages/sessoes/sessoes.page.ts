@@ -36,6 +36,8 @@ export class SessoesPage implements OnInit {
 
     this.sessaoSubscription = this.sessaoService.getSessoes(this.pacienteId).subscribe(data => {
       this.sessoes = data;
+
+      console.log("this.sessoes",this.sessoes);
     
       this.sessoes.sort((a,b) => {
         let dataCompletaA = new Date([a.ano,a.mes,a.dia].join("-") + " " + a.horaSessao);
