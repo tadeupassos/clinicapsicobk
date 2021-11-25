@@ -5,7 +5,11 @@ import { LoginGuard } from './guards/login.guard';
 
 const routes: Routes = [
   { path: "", loadChildren: "./pages/menu/menu.module#MenuPageModule", canActivate: [AuthGuard] },
-  { path: "login", loadChildren: "./pages/login/login.module#LoginPageModule", canActivate: [LoginGuard] }
+  { path: "login", loadChildren: "./pages/login/login.module#LoginPageModule", canActivate: [LoginGuard] },
+  {
+    path: 'add-sessao',
+    loadChildren: () => import('./pages/add-sessao/add-sessao.module').then( m => m.AddSessaoPageModule)
+  },
 ];
 
 @NgModule({

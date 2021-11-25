@@ -25,10 +25,10 @@ export class ServicosService {
     return this.loading.present();
   }
 
-  public async presentToast(message: string){
-    const toast = await this.toastCrtl.create({ message,  duration: 2000 });
+  public async presentToast(message: string, duration = 2000){
+    const toast = await this.toastCrtl.create({ message,  duration });
     toast.present();
-  }  
+  }   
 
   // public formatarValor(event, dados) {
 

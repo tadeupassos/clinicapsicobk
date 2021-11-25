@@ -17,6 +17,7 @@ export class PsicologosPage implements OnInit {
   constructor(private psicologoService: PsicologoService) { 
     this.psicologoSubscription = this.psicologoService.getPsicologos().subscribe(data => {
       this.psicologos = data;
+      this.psicologos.sort((a,b) => { return a.nome < b.nome ? -1 : 1 });
       console.log(data);
     });
   }

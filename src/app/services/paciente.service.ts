@@ -44,4 +44,19 @@ export class PacienteService {
   deletePaciente(id: string){
     return this.pacientesCollection.doc(id).delete();
   }
+
+  getPacientesPorCRP(crp:string){
+    return this.afs.collection<Paciente>('Pacientes', ref => ref
+    .where('crp','==',crp))
+    .snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+
+          return {id, ...data };
+        })
+      })
+    )
+   }  
 }

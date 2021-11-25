@@ -55,11 +55,12 @@ export class SessaoService {
 
     let query = this.afs.collection<Sessao>('Sessoes').ref
     .where('dataSessaoStamp', '>=', inicio)
-    .where('dataSessaoStamp', '<=', fim);
+    .where('dataSessaoStamp', '<=', fim)
+    .where('atendimento', '==', f.atendimento);
 
-    if(f.atendimento != "Todos"){
-      query = query.where('atendimento', '==', f.atendimento);
-    }
+    // if(f.atendimento != "Todos"){
+    //   query = query.where('atendimento', '==', f.atendimento);
+    // }
 
     if(f.convenio != "Todos"){
       query = query.where('nomeConvenio', '==', f.convenio);
@@ -72,6 +73,22 @@ export class SessaoService {
     return this.afs.collection<Sessao>('Sessoes', ref => query)
     .snapshotChanges()
     .pipe(
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        })
+        .filter(f => f.frequencia != "");
+      })
+    )
+  }
+
+  getSessoesAgendadas(crp: string) {
+    return this.afs.collection<Sessao>('Sessoes', ref => ref
+      .where('crp', '==', crp)
+      .where('frequencia', '==', '')
+    ).snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {
           const data = a.payload.doc.data();

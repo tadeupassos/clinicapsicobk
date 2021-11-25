@@ -123,6 +123,24 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'add-sessao',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../add-sessao/add-sessao.module').then( m => m.AddSessaoPageModule)
+          }
+        ]
+      },
+      {
+        path: 'add-sessao/:id',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../add-sessao/add-sessao.module').then( m => m.AddSessaoPageModule)
+          }
+        ]
+      },
+      {
         path: 'cadsessao/:parametro/:id',
         children: [
           {
@@ -165,6 +183,15 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () => import('../fechamento/fechamento.module').then( m => m.FechamentoPageModule)
+          }
+        ]
+      },
+      {
+        path: 'agenda/:id',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../agenda/agenda.module').then( m => m.AgendaPageModule)
           }
         ]
       },

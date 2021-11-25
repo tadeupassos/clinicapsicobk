@@ -18,7 +18,7 @@ export class FechamentoPage implements OnInit {
   filtro = {
     inicio: "",
     fim: "",
-    atendimento: "Todos",
+    atendimento: "Convênio",
     convenio: "Todos",
     psicologo: "Todos"
   }
@@ -123,8 +123,24 @@ export class FechamentoPage implements OnInit {
             qtdeConvenio: convenio.length,
             valorConvenio: 0,
             repasse: 0,
-            convenios: []
+            convenios: [],
+            presencaC: convenio.filter((f:Sessao) => { return f.frequencia == "Presença" }).length,
+            faltaC: convenio.filter((f:Sessao) => { return f.frequencia == "Falta" }).length,
+            faltaJc: convenio.filter((f:Sessao) => { return f.frequencia == "Falta Justificada" }).length,
+            faltaTc: convenio.filter((f:Sessao) => { return f.frequencia == "Falta do Terapeuta" }).length,
+            faltaFc: convenio.filter((f:Sessao) => { return f.frequencia == "Feriado" }).length,
+            presencaP: particular.filter((f:Sessao) => { return f.frequencia == "Presença" }).length,
+            faltaP: particular.filter((f:Sessao) => { return f.frequencia == "Falta" }).length,
+            faltaJp: particular.filter((f:Sessao) => { return f.frequencia == "Falta Justificada" }).length,
+            faltaTp: particular.filter((f:Sessao) => { return f.frequencia == "Falta do Terapeuta" }).length,
+            faltaFp: particular.filter((f:Sessao) => { return f.frequencia == "Feriado" }).length,
           } 
+
+          // Presença
+          // Falta
+          // Falta Justificada
+          // Falta do Terapeuta
+          // Feriado
   
           convenio.forEach((c:Sessao) => {
             psico.valorConvenio += Number(c.valor.replace(",","."));

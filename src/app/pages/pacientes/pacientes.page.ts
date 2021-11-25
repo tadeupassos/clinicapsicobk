@@ -17,7 +17,7 @@ export class PacientesPage implements OnInit {
   todosPacientes = new Array<Paciente>();
   private pacientesSubscription: Subscription;
 
-  filtrarPsicologo: string = 'Todos';
+  filtrarPsicologo: string = 'Selecionar';
   totalPacientes = 0;
 
   psicologos = new Array<Psicologo>();
@@ -46,6 +46,7 @@ export class PacientesPage implements OnInit {
 
     this.psicologoSubscription = this.psicologoService.getPsicologos().subscribe(data => {
       this.psicologos = data;
+      this.psicologos.sort((a,b) => { return a.nome < b.nome ? -1 : 1 });
     });  
 
   }
@@ -59,10 +60,6 @@ export class PacientesPage implements OnInit {
     this.psicologoSubscription.unsubscribe();
   }
 
-  ionViewWillEnter() {
-
-  }
-  
   filtrarPorLetra(ev: any){
 
     const val = ev.target.value;

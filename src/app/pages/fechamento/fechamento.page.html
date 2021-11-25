@@ -25,8 +25,7 @@
         <ion-text><h5>Tipo Atendimento</h5></ion-text>
         <select [(ngModel)]="filtro.atendimento" class="campo selecionar" 
         (ngModelChange)="filtro.atendimento != 'Convênio' ? filtro.convenio = 'Todos' : null">
-          <option value="Todos" selected>Todos</option>
-          <option value="Convênio">Convênio</option>
+          <option value="Convênio" selected>Convênio</option>
           <option value="Particular">Particular</option>
         </select>
       </ion-col>
@@ -57,7 +56,7 @@
   </div>
 
   <ion-row>
-    <ion-col size="4">
+    <ion-col size="4" *ngIf="filtro.atendimento == 'Particular'">
       <div class="box" style="border: 2px solid #475F94;">
         <span class="titulo corP">Particular</span>
         <ion-row>
@@ -85,7 +84,7 @@
         </ion-row>
       </div>
     </ion-col>
-    <ion-col size="8">
+    <ion-col size="8" *ngIf="filtro.atendimento == 'Convênio'">
       <div style="margin-right: 40px; border: 2px solid #048243" class="box">
         <span class="titulo corC">Convênio</span>
         <ion-row>
@@ -129,31 +128,55 @@
         <div class="nome">
           {{ r.nome }}
         </div>
-        <ion-row class="tituloCartao">
-          <ion-col size="2"></ion-col>
-          <ion-col class="flex-center" size="2">Qtde</ion-col>
-          <ion-col class="flex-center" size="5">Valor</ion-col>
-          <ion-col class="flex-center" size="3">R/S</ion-col>
-        </ion-row>
-        <ion-row class="tituloCartao" style="border-top: 1px solid gray;">
-          <ion-col class="corP" size="2">Part.</ion-col>
-          <ion-col class="corP flex-center" size="2">{{ r.qtdeParticular }}</ion-col>
-          <ion-col class="corP flex-center" size="5">{{ r.valorParticular | currency:'BRL' }}</ion-col>
-          <ion-col class="corP flex-center" size="3">{{ r.subLocacao | currency:'BRL' }}</ion-col>
-        </ion-row>
-        <ion-row class="tituloCartao" style="border-top: 1px solid gray;">
-          <ion-col class="corC" size="2">Conv.</ion-col>
-          <ion-col class="corC flex-center" size="2">{{ r.qtdeConvenio }}</ion-col>
-          <ion-col class="corC flex-center" size="5">{{ r.valorConvenio | currency:'BRL' }}</ion-col>
-          <ion-col class="corC flex-center" size="3">{{ r.repasse | currency:'BRL' }}</ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="12">
-            <ion-chip class="tags" *ngFor="let c of r.convenios" color="dark">
-              <strong>{{ c.qtde }}</strong>&nbsp; {{ c.convenio }}
-            </ion-chip>
-          </ion-col>
-        </ion-row>
+        <div *ngIf="filtro.atendimento == 'Convênio'">
+          <ion-row class="tituloCartao">
+            <ion-col class="flex-center" size="6">Bruto</ion-col>
+            <ion-col class="flex-center" size="6">Repasse</ion-col>
+          </ion-row>
+          <ion-row class="tituloCartao" style="border-top: 1px solid gray;">
+            <ion-col class="corC flex-center" size="6">{{ r.valorConvenio | currency:'BRL' }}</ion-col>
+            <ion-col class="corC flex-center" size="6">{{ r.repasse | currency:'BRL' }}</ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12">
+              <ion-chip class="tags" *ngFor="let c of r.convenios" color="dark">
+                <strong>{{ c.qtde }}</strong>&nbsp; {{ c.convenio }}
+              </ion-chip>
+            </ion-col>
+          </ion-row>
+          <ion-row style="font-size: 16px;">
+            <ion-col class="corC" size="12">
+              Presença: <strong>{{ r.presencaC }}</strong><br>
+              Falta: <strong>{{ r.faltaC }}</strong><br>
+              Falta Justificada: <strong>{{ r.faltaJc }}</strong><br>
+              Falta do Terapeuta: <strong>{{ r.faltaTc }}</strong><br>
+              Feriado: <strong>{{ r.faltaFc }}</strong>
+            </ion-col>
+          </ion-row>
+        </div>
+        <div *ngIf="filtro.atendimento == 'Particular'">
+          <ion-row class="tituloCartao" style="border-top: 3px solid gray;">
+            <ion-col size="2"></ion-col>
+            <ion-col class="flex-center" size="2">Qtde</ion-col>
+            <ion-col class="flex-center" size="5">Valor</ion-col>
+            <ion-col class="flex-center" size="3">Sublocação</ion-col>
+          </ion-row>
+          <ion-row class="tituloCartao" style="border-top: 1px solid gray;">
+            <ion-col class="corP" size="2"><strong>Part.</strong></ion-col>
+            <ion-col class="corP flex-center" size="2">{{ r.qtdeParticular }}</ion-col>
+            <ion-col class="corP flex-center" size="5">{{ r.valorParticular | currency:'BRL' }}</ion-col>
+            <ion-col class="corP flex-center" size="3">{{ r.subLocacao | currency:'BRL' }}</ion-col>
+          </ion-row>
+          <ion-row style="font-size: 13px;" class="tituloCartao">
+            <ion-col class="corP" size="12">
+              Presença: <strong>{{ r.presencaP }}</strong>&nbsp;&nbsp;&nbsp;
+              Falta: <strong>{{ r.faltaP }}</strong>&nbsp;&nbsp;&nbsp;
+              Falta Justificada: <strong>{{ r.faltaJp }}</strong> <br> 
+              Falta do Terapeuta: <strong>{{ r.faltaTp }}</strong>&nbsp;&nbsp;&nbsp;
+              Feriado: <strong>{{ r.faltaFp }}</strong>
+            </ion-col>
+          </ion-row>
+        </div>
       </div>
     </ion-col>
   </ion-row>

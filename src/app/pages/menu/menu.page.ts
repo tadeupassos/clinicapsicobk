@@ -19,10 +19,10 @@ export class MenuPage implements OnInit {
       title: 'Convênios',
       url: '/menu/convenios'
     },
-    // {
-    //   title: 'Guias',
-    //   url: '/menu/guias'
-    // },
+    {
+      title: 'Guias',
+      url: '/menu/guias'
+    },
     {
       title: 'Psicólogos',
       url: '/menu/psicologos'
