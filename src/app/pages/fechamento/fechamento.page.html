@@ -84,6 +84,7 @@
         </ion-row>
       </div>
     </ion-col>
+    
     <ion-col size="8" *ngIf="filtro.atendimento == 'Convênio'">
       <div style="margin-right: 40px; border: 2px solid #048243" class="box">
         <span class="titulo corC">Convênio</span>
@@ -147,10 +148,22 @@
           <ion-row style="font-size: 16px;">
             <ion-col class="corC" size="12">
               Presença: <strong>{{ r.presencaC }}</strong><br>
-              Falta: <strong>{{ r.faltaC }}</strong><br>
-              Falta Justificada: <strong>{{ r.faltaJc }}</strong><br>
-              Falta do Terapeuta: <strong>{{ r.faltaTc }}</strong><br>
-              Feriado: <strong>{{ r.faltaFc }}</strong>
+              Falta Paciente: <strong>{{ r.faltaPaciente }}</strong><br>
+              Falta Justificada Paciente: <strong>{{ r.faltaJustificadaPaciente }}</strong><br>
+              <span [ngStyle]="{'color' : r.faltaTerapeuta ? 'red' : '#048243' }">
+                Falta Terapeuta: <strong>{{ r.faltaTerapeuta }}</strong>
+              </span><br> 
+              Falta Justificada Terapeuta: <strong>{{ r.faltaJustificadaTerapeuta }}</strong><br>
+              Recessos e Feriados: <strong>{{ r.recessosFeriados }}</strong><br>
+              Manutenção Predial: <strong>{{ r.manutencaoPredial }}</strong><br>
+              Reposição: <strong>{{ r.reposicao }}</strong><br>
+              <br>
+              <div style="color: #013018;">
+                Falta: <strong>{{ r.faltaC }}</strong><br>
+                Falta Justificada: <strong>{{ r.faltaJc }}</strong><br>
+                Falta do Terapeuta: <strong>{{ r.faltaTc }}</strong><br>
+                Feriado: <strong>{{ r.faltaFc }}</strong>
+              </div>
             </ion-col>
           </ion-row>
         </div>

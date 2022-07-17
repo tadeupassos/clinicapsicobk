@@ -10,6 +10,14 @@ const routes: Routes = [
     path: 'add-sessao',
     loadChildren: () => import('./pages/add-sessao/add-sessao.module').then( m => m.AddSessaoPageModule)
   },
+  {
+    path: 'lista-frequencia',
+    loadChildren: () => import('./pages/lista-frequencia/lista-frequencia.module').then( m => m.ListaFrequenciaPageModule)
+  },
+  {
+    path: 'atendimento',
+    loadChildren: () => import('./pages/atendimento/atendimento.module').then( m => m.AtendimentoPageModule)
+  },
 ];
 
 @NgModule({

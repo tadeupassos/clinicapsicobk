@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Tipos de Frequência</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()" color="danger"> Fechar </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row>
+    <ion-col size="3"></ion-col>
+    <ion-col style="text-align: center; font-weight: bold;" size="3">Tipo</ion-col>
+    <ion-col style="text-align: end; font-weight: bold;" size="3">Repasse</ion-col>
+    <ion-col size="3"></ion-col>
+  </ion-row>
+  <ion-list style="padding: 0px 150px;">
+    <ion-item *ngFor="let f of frequencias">
+      <ion-label>{{ f.tipo }}</ion-label>
+      <ion-checkbox (click)="setaRepasse(f)" slot="end" checked="true" *ngIf="f.repasse == 'S'"></ion-checkbox>
+      <ion-checkbox 
+        (click)="setaRepasse(f)" 
+        slot="end" 
+        checked="false" 
+        *ngIf="f.repasse == 'N'"
+        [class.disabled]="f.tipo == 'Reposição'"
+      ></ion-checkbox>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -34,18 +34,18 @@ export class SessoesPage implements OnInit {
       this.nomePaciente = p.nome;
     });
 
-    this.sessaoSubscription = this.sessaoService.getSessoes(this.pacienteId).subscribe(data => {
-      this.sessoes = data;
+    // this.sessaoSubscription = this.sessaoService.getSessoes(this.pacienteId).subscribe(data => {
+    //   this.sessoes = data;
 
-      console.log("this.sessoes",this.sessoes);
+    //   console.log("this.sessoes",this.sessoes);
     
-      this.sessoes.sort((a,b) => {
-        let dataCompletaA = new Date([a.ano,a.mes,a.dia].join("-") + " " + a.horaSessao);
-        let dataCompletaB = new Date([b.ano,b.mes,b.dia].join("-") + " " + b.horaSessao);
-        return  dataCompletaA < dataCompletaB ? -1 : 1;
-      });
+    //   this.sessoes.sort((a,b) => {
+    //     let dataCompletaA = new Date([a.ano,a.mes,a.dia].join("-") + " " + a.horaSessao);
+    //     let dataCompletaB = new Date([b.ano,b.mes,b.dia].join("-") + " " + b.horaSessao);
+    //     return  dataCompletaA < dataCompletaB ? -1 : 1;
+    //   });
 
-    });
+    // });
 
   }
 

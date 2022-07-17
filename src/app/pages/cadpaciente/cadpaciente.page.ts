@@ -315,6 +315,7 @@ export class CadpacientePage implements OnInit {
 
     if(this.pacienteId){
       try {
+        this.paciente.crp = this.paciente.crp.toString();
         await this.pacienteService.updatePaciente(this.pacienteId, this.paciente);
         await this.servicos.loading.dismiss();
 

@@ -3,22 +3,31 @@
   <ion-menu contentId="menu-content" menuId="menu-content">
     <ion-header>
       <ion-toolbar color="primary">
-        <ion-title>Menu</ion-title>
+        <ion-title>
+          Menu
+        </ion-title>
       </ion-toolbar>
     </ion-header>
 
     <ion-content>
       <ion-list>
         <ion-menu-toggle auto-hide="false" *ngFor="let p of pages">
+
           <ion-item [routerLink]="p.url" routerDirection="root" [class.active-item]="selectedPath === p.url">
             {{ p.title }}
           </ion-item>
         </ion-menu-toggle>
       </ion-list>
+      <ion-item *ngIf="serv.permissao" style="cursor: pointer;" (click)="abrirTipoFrequencia()">
+        Tipos de Frequência
+      </ion-item>
       <ion-item button (click)="sair()">
         <ion-icon name="return-left" slot="start"></ion-icon>
         Sair
       </ion-item>
+      <div class="versao">
+        Versão 0.1.54
+      </div>
     </ion-content>
   </ion-menu>
 

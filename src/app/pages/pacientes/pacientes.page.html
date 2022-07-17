@@ -33,33 +33,47 @@
     </ion-fab-button>
   </ion-fab>     -->
 
+  <!-- <button class="botao sessoes" [routerLink]="['/menu/sessoes',p.id]">
+    Sessões
+  </button>
+  <button *ngIf="p.convenio" class="botao guias" [routerLink]="['/menu/guias','paciente',p.id]">
+    Guias
+  </button>  -->
+
   <ion-grid>
-    <ion-row class="cartao">
-      <ion-col *ngFor="let p of pacientes" size="6" >
-          <ion-row>
-            <ion-col size="11">
-              <button class="botao nome" [routerLink]="['/menu/cadpaciente',p.id]">
-                {{ p.nome }}
-              </button>
-              <button *ngIf="permissao" class="botao prontuario" [routerLink]="['/menu/prontuario',p.id]">
-                Prontuário
-              </button>              
-              <button class="botao sessoes" [routerLink]="['/menu/sessoes',p.id]">
-                Sessões
-              </button>
-              <button *ngIf="p.convenio" class="botao guias" [routerLink]="['/menu/guias','paciente',p.id]">
-                Guias
-              </button> 
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col size="11" class="linhaDebaixo flex-left">
-              <div class="nomePsico">Psicólogo: {{ p.psicologo }}</div>&nbsp;&nbsp;&nbsp;
-              <div [class.colorTipoConvenio]="p.atendimento == 'Convênio'"  
-              [class.colorTipoParticular]="p.atendimento == 'Particular'"><strong>{{ p.atendimento }} <span *ngIf="p.convenio"> - {{ p.convenio }}</span></strong></div>
-            </ion-col>
-          </ion-row>
+    <ion-row style="color: rgb(97, 97, 97); font-weight: bold; font-size: 17px;">
+      <ion-col size="1">Pront.</ion-col>
+      <ion-col size="3">Paciente</ion-col>
+      <ion-col size="2">Convênio</ion-col>
+      <ion-col size="3">Profissional</ion-col>
+      <ion-col size="2">Especialidade</ion-col>
+    </ion-row>
+
+    <ion-row *ngFor="let p of pacientes" class="cartao linhaDebaixo">
+      <ion-col size="1" class="flex-left">
+        <button *ngIf="serv.permissao" class="botao prontuario" [routerLink]="['/menu/prontuario',p.id]">
+          {{ p.prontuario.codigo }}
+        </button>    
       </ion-col>
+      <ion-col size="3" class="flex-left">
+        <button class="botao nome" [routerLink]="['/menu/cadpaciente',p.id]">
+          {{ p.nome }}
+        </button>
+      </ion-col>
+      <ion-col size="2" class="flex-left">
+        <div 
+          [class.colorTipoConvenio]="p.atendimento == 'Convênio'"  
+          [class.colorTipoParticular]="p.atendimento == 'Particular'">
+          <strong>
+            <span *ngIf="p.convenio">{{ p.convenio }}</span>
+            <span *ngIf="!p.convenio">Particular</span>
+          </strong>
+        </div>
+      </ion-col>
+      <ion-col size="3" class="flex-left">
+        <div class="nomePsico">{{ p.psicologo }}</div>
+      </ion-col>
+      <ion-col size="2" class="flex-left" style="font-size: 16px;">Psicologia</ion-col>
     </ion-row>
   </ion-grid> 
 </ion-content>

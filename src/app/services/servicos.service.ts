@@ -11,6 +11,8 @@ export class ServicosService {
   public loading: any;
   private cobrancaCollection: AngularFirestoreCollection<any>;
   public cobranca: any;
+  public permissao = false;
+
 
   constructor(
     private loadingCtrl: LoadingController,

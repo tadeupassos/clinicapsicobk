@@ -6,7 +6,8 @@ import { ServicosService } from 'src/app/services/servicos.service';
 import { ActivatedRoute } from '@angular/router';
 import { Sessao } from 'src/app/interfaces/sessao';
 import { SessaoService } from 'src/app/services/sessao.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
+import { AtendimentoPage } from '../atendimento/atendimento.page';
 
 @Component({
   selector: 'app-agenda',
@@ -27,7 +28,8 @@ export class AgendaPage {
     private activeRoute: ActivatedRoute,
     private servicos: ServicosService,
     private sessaoService: SessaoService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private modalController: ModalController
   ) {
     this.psicologoId = this.activeRoute.snapshot.params['id'];
 
@@ -96,4 +98,16 @@ export class AgendaPage {
 
     await alert.present();
   }
+
+  async setarAtendimento(id:any) {
+    console.log("setarAtendimento")
+    const modal = await this.modalController.create({
+      component: AtendimentoPage,
+      backdropDismiss: false,
+      componentProps : { id }
+    });
+
+    return await modal.present();
+  }
+
 }

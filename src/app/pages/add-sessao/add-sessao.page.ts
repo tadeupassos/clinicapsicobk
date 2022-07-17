@@ -4,10 +4,9 @@ import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Sessao } from 'src/app/interfaces/sessao';
-import { LoadingController, ModalController, NavController } from '@ionic/angular';
+import { LoadingController, NavController } from '@ionic/angular';
 import { SessaoService } from 'src/app/services/sessao.service';
 import { Paciente } from 'src/app/interfaces/paciente';
-import { ConvenioService } from 'src/app/services/convenio.service';
 import { ServicosService } from 'src/app/services/servicos.service';
 import { take } from 'rxjs/operators';
 
@@ -44,9 +43,6 @@ export class AddSessaoPage implements OnInit {
     private pacienteService: PacienteService,
     private loadingCtrl: LoadingController,
     private sessaoService: SessaoService,
-    private modalController: ModalController,
-    private router: Router,
-    private convenioService: ConvenioService,
     private servicos: ServicosService,
     private navCtrl: NavController
   ) {

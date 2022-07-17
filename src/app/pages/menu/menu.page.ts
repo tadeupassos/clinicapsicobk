@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterEvent } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
+import { ServicosService } from 'src/app/services/servicos.service';
+import { ListaFrequenciaPage } from '../lista-frequencia/lista-frequencia.page';
 
 
 @Component({
@@ -19,10 +21,10 @@ export class MenuPage implements OnInit {
       title: 'Convênios',
       url: '/menu/convenios'
     },
-    {
-      title: 'Guias',
-      url: '/menu/guias'
-    },
+    // {
+    //   title: 'Guias',
+    //   url: '/menu/guias'
+    // },
     {
       title: 'Psicólogos',
       url: '/menu/psicologos'
@@ -35,27 +37,34 @@ export class MenuPage implements OnInit {
 
   selectedPath = '';
 
-  constructor(private router: Router, private navCtrl: NavController) {
+  constructor(private router: Router, private modalController: ModalController, public serv: ServicosService) {
     this.router.events.subscribe((event: RouterEvent) => {
 
-      //console.log("page: ", event.url);
-
-      if(typeof event.url === 'undefined' || event.url == '/' || event.url == "/menu/cadpaciente"){
+      if (typeof event.url === 'undefined' || event.url == '/' || event.url == "/menu/cadpaciente") {
         this.selectedPath = '/menu/pacientes';
-      }else{
+      } else {
         this.selectedPath = event.url;
       }
-
     });
   }
 
   ngOnInit() {
+
   }
 
-  sair(){
+  sair() {
     localStorage.clear();
     //window.location.reload();
     this.router.navigate(['login']);
+  }
+
+  async abrirTipoFrequencia() {
+    const modal = await this.modalController.create({
+      component: ListaFrequenciaPage,
+      backdropDismiss: false
+    });
+
+    return await modal.present();
   }
 
 }

@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Frequência da Sessão</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()" color="danger"> Fechar </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-row>
+      <ion-col size="12">
+        Paciente:  <span class="textoLeitura">{{ sessao.nomePaciente }}</span>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        Horário:  <span class="textoLeitura2">{{ sessao.diaSemana }}, {{ sessao.dataSessao }}, {{ sessao.horaSessao }}</span>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+
+  <form [formGroup]="fGroup" class="ion-padding">
+    <ion-row>
+      <ion-col size="12">
+        <ion-text><h5>Frequência <ion-text color="danger">*</ion-text></h5></ion-text>
+        <select formControlName="frequencia" class="campo">
+          <option>Presença</option>
+          <option>Falta Paciente</option>
+          <option>Falta Justificada Paciente</option>
+          <option>Falta Terapeuta</option>
+          <option>Falta Justificada Terapeuta</option>
+          <option>Recessos e Feriados</option>
+          <option>Manutenção Predial</option>
+          <option>Reposição</option>
+          <!-- <option>Presença</option>
+          <option>Falta</option>
+          <option>Falta Justificada</option>
+          <option>Falta do Terapeuta</option>
+          <option>Feriado</option> -->
+        </select>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.frequencia.errors">
+          <span *ngIf="fGroup.controls.frequencia.errors.required && fGroup.controls.frequencia.touched">
+            Esse campo é obrigatório
+          </span>
+        </div>   
+      </ion-col>
+    </ion-row>
+  </form>
+
+  <ion-row style="margin: 50px;">
+    <ion-col size="12">
+      <ion-button [disabled]="!fGroup.valid" (click)="salvarDados()" expand="block">
+        Gravar Dados
+      </ion-button>
+    </ion-col>
+    <ion-col>
+      
+    </ion-col>
+  </ion-row> 
+
+</ion-content>

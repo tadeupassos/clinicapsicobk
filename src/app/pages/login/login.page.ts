@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, ToastController } from '@ionic/angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ServicosService } from 'src/app/services/servicos.service';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,8 @@ export class LoginPage implements OnInit {
     private fBuilder: FormBuilder, 
     private navCtrl: NavController,
     private toastCtrl: ToastController,
-    private router: Router
+    private router: Router,
+    private serv: ServicosService
   ) { 
 
 
@@ -43,6 +45,8 @@ export class LoginPage implements OnInit {
       if(this.fGroup.get('senha').value == "insight20fernando"){
         window.localStorage.setItem("logado",this.fGroup.get('usuario').value);
         this.fGroup.get('senha').setValue('');
+        this.serv.permissao = localStorage["logado"] == "fernando.lira";
+        console.log("this.serv.permissao",this.serv.permissao);
         this.navCtrl.navigateForward('/menu');
       }else{
         this.presentToast("Senha incorreta.")
