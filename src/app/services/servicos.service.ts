@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +11,10 @@ export class ServicosService {
 
   public loading: any;
   private cobrancaCollection: AngularFirestoreCollection<any>;
+  private psiCorCollection: AngularFirestoreCollection<any>;
   public cobranca: any;
   public permissao = false;
+  public Psicores = [];
 
 
   constructor(
@@ -20,6 +23,8 @@ export class ServicosService {
     private afs: AngularFirestore
   ) {
     this.cobrancaCollection = this.afs.collection<any>('Fernando');
+    this.psiCorCollection = this.afs.collection<any>('Psicores');
+
   }
 
   public async presentLoading(){
@@ -49,6 +54,7 @@ export class ServicosService {
 
   getCobranca(){
     return this.cobrancaCollection.snapshotChanges().pipe(
+      take(1),
       map(actions => {
         return actions.map(a => {
           const data = a.payload.doc.data();
@@ -58,6 +64,20 @@ export class ServicosService {
         });
       })
     )
-  } 
+  }
+
+  pegarPsicor(){
+    return this.psiCorCollection.snapshotChanges().pipe(
+      take(1),
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+
+          return {id, ...data };
+        });
+      })
+    )
+  }
 
 }

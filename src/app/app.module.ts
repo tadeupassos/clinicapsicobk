@@ -16,6 +16,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { LOCALE_ID } from '@angular/core';
 import localePt from '@angular/common/locales/pt';
 import {registerLocaleData} from '@angular/common';
+import { AtendimentoPageModule } from './pages/atendimento/atendimento.module';
 registerLocaleData(localePt)
 
 @NgModule({
@@ -29,6 +30,7 @@ registerLocaleData(localePt)
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    AtendimentoPageModule
   ],
   providers: [
     StatusBar,

@@ -22,4 +22,5 @@ export interface Sessao {
     valor?: string;
     nomeConvenio?: string;
     dtTimeStamp?: string;
+    sala?: string;
 }

@@ -1,0 +1,239 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-row>
+      <ion-col size="2" class="flex-center">
+        <ion-title>
+          <ion-title>Agenda Geral</ion-title>
+        </ion-title>  
+      </ion-col>
+      <ion-col size="2" class="flex-left">
+        <ion-text>Mês:&nbsp;</ion-text>
+        <select [(ngModel)]="filtrarMes" class="campo" (ngModelChange)="setaFiltroMesAno()">
+          <option *ngFor="let m of meses" [value]="m.id" [selected]="filtrarMes == m.id">{{ m.nome }}</option>
+        </select>
+      </ion-col>
+      <ion-col size="2" class="flex-left">
+        <ion-text>Ano:&nbsp;</ion-text>
+        <select [(ngModel)]="filtrarAno" class="campo" (ngModelChange)="setaFiltroMesAno()">
+          <option *ngFor="let a of anos" >{{ a }}</option>
+        </select>
+      </ion-col>
+      <ion-col size="1">
+        <ion-button (click)="primeiro()" expand="block" color="success">
+          <ion-icon size="large" name="skip-backward"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col size="1">
+        <ion-button (click)="recuar()" expand="block" color="success">
+          <ion-icon size="large" name="rewind"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col size="1">
+        <ion-button (click)="hoje()" expand="block" color="success">
+          Hoje
+        </ion-button>
+      </ion-col>
+      <ion-col size="1">
+        <ion-button (click)="avancar()" expand="block" color="success">
+          <ion-icon size="large" name="fastforward"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col size="1">
+        <ion-button (click)="ultimo()" expand="block" color="success">
+          <ion-icon size="large" name="skip-forward"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div id="elementRef" style="overflow-x: scroll; overflow-y: hidden;">
+    <div style="white-space: nowrap;">
+      <ion-row>
+        <div style="width: 53px;">
+          <ion-col style="height: 70px" class="flex-center">
+            HORA
+          </ion-col>
+        </div>
+
+        <ion-col class="ion-no-padding" size="11">
+          <div
+            *ngFor="let mf of sessaoService.sessoesAgendaGeral; let i = index"
+            [ngStyle]="{'background-color' : mf.data.includes('Segunda-feira') ? '#00800073' : '#e2e2e'}" 
+            class="diaSemana"
+          >
+            <ion-row>
+              <ion-col 
+                [ngStyle]="{'border': mf.data.includes('Segunda-feira') ? '1px solid #00800073' : '1px solid black'}"
+                [class.flex-center]="!mf.data.includes('Segunda-feira')"
+                class="fontSizeHeader" 
+                size="12"
+              >
+                <span *ngIf="mf.data.includes('Segunda-feira')" class="copiarSemana" (click)="copiarSemana(mf.data)">Copiar Semana Anterior</span>
+                <b>{{ mf.data }}</b>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col class="flex-center borda1 ion-no-padding fontSizeHeader" size="4">Sala 01</ion-col>
+              <ion-col class="flex-center borda1 ion-no-padding fontSizeHeader" size="4">Sala 02</ion-col>
+              <ion-col class="flex-center borda1 ion-no-padding fontSizeHeader" size="4">Sala 03</ion-col>
+            </ion-row>
+          </div>
+        </ion-col>
+      </ion-row>
+      
+      <ion-row class="fundoCinza" style="margin-top: -10px;">
+        <div style="width: 53px;">
+          <ion-row *ngFor="let h of ['7h00','7h45','8h30','9h15']">
+            <ion-col class="flex-center borda1 ion-no-padding heightCell" size="12"> <b>{{ h }}</b> </ion-col>
+          </ion-row>
+          <div style="height: 15px;"></div>
+          <ion-row *ngFor="let h of ['10h00','10h45','11h30','12h15']">
+            <ion-col class="flex-center borda1 ion-no-padding heightCell" size="12"> <b>{{ h }}</b> </ion-col>
+          </ion-row>
+          <div style="height: 15px;"></div>
+          <ion-row *ngFor="let h of ['13h00','13h45','14h30','15h15']">
+            <ion-col class="flex-center borda1 ion-no-padding heightCell" size="12"> <b>{{ h }}</b> </ion-col>
+          </ion-row>
+          <div style="height: 62px;"></div>
+          <ion-row *ngFor="let h of ['16h00','16h45','17h30','18h15']">
+            <ion-col class="flex-center borda1 ion-no-padding heightCell" size="12"> <b>{{ h }}</b> </ion-col>
+          </ion-row>
+          <div style="height: 15px;"></div>
+          <ion-row *ngFor="let h of ['19h00','19h45','20h30','21h15']">
+            <ion-col class="flex-center borda1 ion-no-padding heightCell" size="12"> <b>{{ h }}</b> </ion-col>
+          </ion-row>
+        </div>
+        <ion-col class="ion-no-padding" size="11">
+          <div  >
+
+          <div class="diaSemana" *ngFor="let mf of sessaoService.sessoesAgendaGeral">
+            <div *ngFor="let s of mf.salas; let i = index">
+              <ion-row>
+                <ion-col 
+                  [ngStyle]="{'background-color' : s.sala1.mostrar.psicor}" 
+                  class="flex-center borda1 heightCell sizeCell paddingCell" 
+                  size="4"
+                > 
+                  <div 
+                    *ngIf="s.sala1.mostrar != '+' && s.sala1.mostrar.frequencia == ''" 
+                    style="cursor: pointer;" 
+                    (press)="remover(s.sala1.sessaoInteira, s.sala1.sessaoId)" 
+                    (click)="setarAtendimento(s.sala1.sessaoId)"
+                  >
+                    <span><b>{{ s.sala1.mostrar.paciente }}</b></span><br>
+                    <span style="color: rgb(94, 94, 94)">{{ s.sala1.mostrar.psicologo }}</span>
+                  </div>
+                  <div *ngIf="s.sala1.mostrar != '+' && s.sala1.mostrar.frequencia != ''">
+                    <div>
+                      <span><b>{{ s.sala1.mostrar.paciente }}</b></span><br>
+                      <span style="color: rgb(94, 94, 94)">{{ s.sala1.mostrar.psicologo }}</span>
+                    </div>
+                    <span 
+                      [ngStyle]="{'color': s.sala1.mostrar.frequencia == 'Presença' ? 'green' : 'red'}" 
+                      style=" font-weight: bold"
+                    >
+                      {{ s.sala1.mostrar.frequencia }}
+                    </span>
+                  </div>
+                  <div *ngIf="s.sala1.mostrar == '+'">
+                    <ion-button (click)="agendar(s.sala1)"  expand="full" fill="clear" shape="round">
+                      <ion-icon slot="icon-only" name="add"></ion-icon>
+                    </ion-button>
+                  </div>
+                </ion-col>
+                <ion-col 
+                  [ngStyle]="{'background-color' : s.sala2.mostrar.psicor}"  
+                  class="flex-center borda1 heightCell sizeCell paddingCell" 
+                  size="4"
+                > 
+                  <div 
+                    style="cursor: pointer;" 
+                    *ngIf="s.sala2.mostrar != '+' && s.sala2.mostrar.frequencia == ''"
+                    (press)="remover(s.sala2.sessaoInteira, s.sala2.sessaoId)" 
+                    (click)="setarAtendimento(s.sala2.sessaoId)"
+                  >
+                    <span><b>{{ s.sala2.mostrar.paciente }}</b></span><br>
+                    <span style="color: rgb(94, 94, 94)">{{ s.sala2.mostrar.psicologo }}</span>
+                  </div>
+                  <div *ngIf="s.sala2.mostrar != '+' && s.sala2.mostrar.frequencia != ''">
+                    <div>
+                      <span><b>{{ s.sala2.mostrar.paciente }}</b></span><br>
+                      <span style="color: rgb(94, 94, 94)">{{ s.sala2.mostrar.psicologo }}</span>
+                    </div>
+                    <span 
+                      [ngStyle]="{'color': s.sala2.mostrar.frequencia == 'Presença' ? 'green' : 'red'}" 
+                      style=" font-weight: bold"
+                    >
+                      {{ s.sala2.mostrar.frequencia }}
+                    </span>
+                  </div>
+                  <div *ngIf="s.sala2.mostrar == '+'">
+                    <ion-button (click)="agendar(s.sala2)"  expand="full" fill="clear" shape="round">
+                      <ion-icon slot="icon-only" name="add"></ion-icon>
+                    </ion-button>
+                  </div>
+                </ion-col>
+                <ion-col 
+                  class="flex-center borda1 heightCell sizeCell paddingCell" 
+                  [style.background-color]="s.sala3.mostrar.psicor" 
+                  [style.margin-bottom]="i == 3 || i == 7 || i == 11 || i == 15 || i == 19 ? '15px' : '0px' "
+                > 
+                  <div 
+                    *ngIf="s.sala3.mostrar != '+' && s.sala3.mostrar.frequencia == ''"  
+                    style="cursor: pointer;" 
+                    (press)="remover(s.sala3.sessaoInteira, s.sala3.sessaoId)" 
+                    (click)="setarAtendimento(s.sala3.sessaoId)"
+                  >
+                    <span><b>{{ s.sala3.mostrar.paciente }}</b></span><br>
+                    <span style="color: rgb(94, 94, 94)">{{ s.sala3.mostrar.psicologo }}</span>
+                  </div>
+                  <div *ngIf="s.sala3.mostrar != '+' && s.sala3.mostrar.frequencia != ''">
+                    <div>
+                      <span><b>{{ s.sala3.mostrar.paciente }}</b></span><br>
+                      <span style="color: rgb(94, 94, 94)">{{ s.sala3.mostrar.psicologo }}</span>
+                    </div>
+                    <span 
+                      [ngStyle]="{'color': s.sala3.mostrar.frequencia == 'Presença' ? 'green' : 'red'}" 
+                      style=" font-weight: bold"
+                    >
+                      {{ s.sala3.mostrar.frequencia }}
+                    </span>
+                  </div>
+                  <div *ngIf="s.sala3.mostrar == '+'">
+                    <ion-button (click)="agendar(s.sala3)"  expand="full" fill="clear" shape="round">
+                      <ion-icon slot="icon-only" name="add"></ion-icon>
+                    </ion-button>
+                  </div>  
+                </ion-col>
+              </ion-row>
+              <div [ngStyle]="{'background-color' : mf.data.includes('Segunda-feira') ? '#00800073' : '#e2e2e'}" *ngIf="i == 11">
+                <ion-row>
+                  <ion-col 
+                    [ngStyle]="{'border': mf.data.includes('Segunda-feira') ? '1px solid #00800073' : '1px solid black'}"  
+                    class="fontSizeHeader flex-center" 
+                    size="12"
+                  >
+                    <b>{{ mf.data }}</b>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col class="flex-center borda1 ion-no-padding fontSizeHeader" size="4">Sala 01</ion-col>
+                  <ion-col class="flex-center borda1 ion-no-padding fontSizeHeader" size="4">Sala 02</ion-col>
+                  <ion-col class="flex-center borda1 ion-no-padding fontSizeHeader" size="4">Sala 03</ion-col>
+                </ion-row>
+              </div>
+            </div>
+          </div>
+          </div>
+
+        </ion-col>
+      </ion-row>
+      
+      <div style="height: 10px;"></div>
+    </div>
+  </div>
+
+
+</ion-content>

@@ -162,7 +162,7 @@
     </ion-row>
 
     <ion-row class="margemLinha">    
-      <ion-col size="3">
+      <ion-col size="4">
         <ion-text><h5>Psicólogo <ion-text color="danger">*</ion-text></h5></ion-text>
         <select formControlName="psicologo" class="campo" (ngModelChange)="setarCPR($event)">
           <option *ngFor="let p of psicologos" [value]="p.nome" selected>{{ p.nome }}</option>
@@ -173,7 +173,7 @@
       </ion-col>
       <ion-col size="1">
         <ion-text><h5>CRP <ion-text color="danger">*</ion-text></h5></ion-text>
-        <ion-input type="number" formControlName="crp" class="campo" readonly></ion-input>
+        <ion-input type="text" formControlName="crp" class="campo" readonly></ion-input>
         <div class="mensagemValidacao" *ngIf="fGroup.controls.crp.errors">
           <span *ngIf="fGroup.controls.crp.errors.required && fGroup.controls.crp.touched">Esse campo é obrigatório</span>
         </div>         

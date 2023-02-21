@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ModalController, NavParams } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, NavParams } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { Paciente } from 'src/app/interfaces/paciente';
 import { Sessao } from 'src/app/interfaces/sessao';
@@ -11,7 +11,7 @@ import { SessaoService } from 'src/app/services/sessao.service';
 @Component({
   selector: 'app-atendimento',
   templateUrl: './atendimento.page.html',
-  styleUrls: ['./atendimento.page.scss'],
+  styleUrls: ['./atendimento.page.scss']
 })
 export class AtendimentoPage implements OnInit {
 
@@ -21,6 +21,7 @@ export class AtendimentoPage implements OnInit {
   public sessaoSubscription: Subscription;  
   private paciente: Paciente = {};
   private pacienteSubscription: Subscription;  
+  public loading: any;
 
   constructor(
     private fBuilder: FormBuilder,
@@ -28,11 +29,13 @@ export class AtendimentoPage implements OnInit {
     private navParams: NavParams,
     private sessaoService: SessaoService,
     private pacienteService: PacienteService,
-    private serv: ServicosService
+    private serv: ServicosService,
+    private alertController: AlertController,
+    private loadingCtrl: LoadingController,
   ) {
 
     this.fGroup = this.fBuilder.group({
-      'frequencia': [this.sessao.frequencia, Validators.compose([Validators.required])],
+      'frequencia': ['', Validators.compose([Validators.required])],
     });
 
     this.sessaoId = this.navParams.data.id;
@@ -40,10 +43,15 @@ export class AtendimentoPage implements OnInit {
       this.sessao = data;
       console.log("this.sessao",this.sessao);
 
-      this.pacienteSubscription = this.pacienteService.getPaciente(this.sessao.pacienteId).subscribe(data => {
-        this.paciente = data;
-      });
+      if(this.sessao){
+        this.fGroup = this.fBuilder.group({
+          'frequencia': [this.sessao.frequencia, Validators.compose([Validators.required])],
+        });
 
+        this.pacienteSubscription = this.pacienteService.getPaciente(this.sessao.pacienteId).subscribe(data => {
+          this.paciente = data;
+        });
+      }
     });
   }
 
@@ -51,22 +59,45 @@ export class AtendimentoPage implements OnInit {
   }
 
   async closeModal() {
-    await this.modalController.dismiss();
+    await this.modalController.dismiss("nada");
   }
 
   async salvarDados(){
-    this.serv.presentLoading();
-
     this.sessao.frequencia = this.fGroup.value.frequencia;
     this.sessao.userId = "100";  
+    await this.modalController.dismiss({ id: this.sessaoId, sessao: this.sessao });
+  }
+  
+  async excluir(){
+    const alert = await this.alertController.create({
+      header: 'Tem certeza que deseja excluir!',
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: 'Não',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Sim',
+          handler: async () => {
+            await this.presentLoading();
+            this.sessaoService.deleteSessao(this.sessaoId);
+            await this.loading.dismiss();
+            this.closeModal();
+          }
+        }
+      ]
+    });
 
-    try {
-      await this.sessaoService.updateSessao(this.sessaoId, this.sessao);
-      this.serv.loading.dismiss();
-      await this.modalController.dismiss();
-    }catch(error) {
-      this.serv.loading.dismiss();
-    }
+    await alert.present();
+  }
+
+  async presentLoading(){
+    this.loading = await this.loadingCtrl.create({ message: "Por favor, aguarde..." });
+    return this.loading.present();
   }
 
 }

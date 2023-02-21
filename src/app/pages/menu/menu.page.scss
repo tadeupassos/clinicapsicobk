@@ -3,7 +3,14 @@
 }
 
 ion-menu{
-    max-width: 15% !important; 
+    max-width: 10% !important; 
+}
+
+.split-pane-md.split-pane-visible>.split-pane-side {
+    min-width: 190px;
+    max-width: 28%;
+    border-right: var(--border);
+    border-left: 0;
 }
 
 .versao {

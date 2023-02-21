@@ -4,11 +4,13 @@ import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Sessao } from 'src/app/interfaces/sessao';
-import { LoadingController, NavController } from '@ionic/angular';
+import { LoadingController, NavController, AlertController } from '@ionic/angular';
 import { SessaoService } from 'src/app/services/sessao.service';
 import { Paciente } from 'src/app/interfaces/paciente';
+import { Psicologo } from 'src/app/interfaces/psicologo';
 import { ServicosService } from 'src/app/services/servicos.service';
 import { take } from 'rxjs/operators';
+import { PsicologoService } from 'src/app/services/psicologo.service';
 
 @Component({
   selector: 'app-add-sessao',
@@ -26,8 +28,8 @@ export class AddSessaoPage implements OnInit {
   public sessaoSubscription: Subscription;  
   public pacienteId = "";
   public nomePaciente = "";   
-  public psicologo = "";
-  public crp = "";
+  // public psicologo = "";
+  // public crp = "";
   public loading: any;
   public fGroup: FormGroup;
 
@@ -37,6 +39,9 @@ export class AddSessaoPage implements OnInit {
 
   todasSessoes = new Array<Sessao>();
 
+  public psicologos = new Array<Psicologo>();
+  private psicologoSubscription: Subscription;    
+
   constructor(
     private fBuilder: FormBuilder,
     private activeRoute: ActivatedRoute,
@@ -44,55 +49,74 @@ export class AddSessaoPage implements OnInit {
     private loadingCtrl: LoadingController,
     private sessaoService: SessaoService,
     private servicos: ServicosService,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private psicologoService: PsicologoService,
   ) {
-    this.psicologo = localStorage.getItem("nomePsicologo");
-    this.crp = localStorage.getItem("crp");
+    // this.psicologo = localStorage.getItem("nomePsicologo");
+    // this.crp = localStorage.getItem("crp");
+
+    this.psicologoSubscription = this.psicologoService.getPsicologos().subscribe(data => {
+      this.psicologos = data;
+      console.log("psicologos",this.psicologos);
+      this.psicologos.sort((a,b) => { return a.nome < b.nome ? -1 : 1 });
+    });  
 
     this.fGroup = this.fBuilder.group({
-      'pacienteId' : ['', Validators.compose([Validators.required,])],
+      'nomePaciente' : ['', Validators.compose([Validators.required,])],
+      'psicologo' : ['', Validators.compose([Validators.required,])],
       'qtdeSessoes': ['', Validators.compose([Validators.required,])],
       'dataInicio': ['', Validators.compose([Validators.required,])],
       'dataFim': [''],
       'diaSemana': ['', Validators.compose([Validators.required,])],
-      'hora': ['', Validators.compose([Validators.required,])]
+      'hora': ['', Validators.compose([Validators.required,])],
+      'sala': ['', Validators.compose([Validators.required,])],
+      'crp': ['', Validators.compose([Validators.required,])]
     }); 
-
-    this.fGroup.controls.qtdeSessoes.setValue('1');
-
-    this.pegandoSessoes();
 
     this.sessaoId = this.activeRoute.snapshot.params['id'];
     if(this.sessaoId){
       this.sessaoService.getSessao(this.sessaoId).pipe(
         take(1)
       ).subscribe((s:Sessao) => {
-
+        this.sessao = s;
         let [dia,mes,ano] =s.dataSessao.split("/");
 
+        this.pegandoSessoesDoPsicologo(s.crp);
+        this.carregarPacientesDoPsicologo(s.crp);
+
         this.fGroup = this.fBuilder.group({
-          'pacienteId' : [s.pacienteId, Validators.compose([Validators.required,])],
+          'nomePaciente' : [s.nomePaciente, Validators.compose([Validators.required,])],
+          'psicologo' : [s.psicologo, Validators.compose([Validators.required,])],
           'qtdeSessoes': ["1", Validators.compose([Validators.required,])],
           'dataInicio': [[ano,mes,dia].join("-"), Validators.compose([Validators.required,])],
           'dataFim': [''],
           'diaSemana': [s.diaSemana, Validators.compose([Validators.required,])],
-          'hora': [s.horaSessao, Validators.compose([Validators.required,])]
+          'hora': [s.horaSessao, Validators.compose([Validators.required,])],
+          'sala': [s.sala, Validators.compose([Validators.required,])],
+          'crp': [s.crp, Validators.compose([Validators.required,])]
         }); 
       });
+    }else{
+      let [dia,mes,ano] = this.sessaoService.novaSessao.data.split("/");
+      this.fGroup.controls.dataInicio.setValue([ano,mes,dia].join("-"));
+      this.fGroup.controls.hora.setValue(this.sessaoService.novaSessao.hora);
+      this.fGroup.controls.sala.setValue(this.sessaoService.novaSessao.sala);
+
+      let d = new Date(Number(ano),Number(mes) - 1,Number(dia),0,0,0);
+      this.fGroup.controls.diaSemana.setValue(this.weekday[d.getDay()]);
     }
+
+    this.fGroup.controls.qtdeSessoes.setValue('1');
 
    }
 
   ngOnInit() {
-    this.pacientesSubscription = this.pacienteService.getPacientesPorCRP(this.crp).subscribe(data => {
-      this.pacientes = data;
-      this.pacientes.sort((a,b) => { return a.nome < b.nome ? -1 : 1 });
-      console.log("this.pacientes",this.pacientes);
-    });
+
   }
 
   ngOndestroy() {
     if(this.pacientesSubscription) this.pacientesSubscription.unsubscribe();
+    if(this.psicologoSubscription) this.psicologoSubscription.unsubscribe();
   } 
 
   dataInicioMascara(event){
@@ -119,7 +143,6 @@ export class AddSessaoPage implements OnInit {
       let ano = parseInt(this.fGroup.value.dataInicio.substr(6,4));
       let d  = new Date(ano,mes - 1,dia,0,0,0);
 
-      //this.fGroup.value.diaSemana = this.weekday[d.getDay()- 1];
       this.fGroup.controls.diaSemana.setValue(this.weekday[d.getDay() - 1]);
 
       this.horario.setFocus();
@@ -163,15 +186,8 @@ export class AddSessaoPage implements OnInit {
 
   geraDataFim(){
 
-    console.log("this.fGroup.value.dataInicio",this.fGroup.value.dataInicio);
-
-    // let dia = parseInt(this.fGroup.value.dataInicio.substr(0,2));
-    // let mes = parseInt(this.fGroup.value.dataInicio.substr(3,2));
-    // let ano = parseInt(this.fGroup.value.dataInicio.substr(6,4));
-
     let [ano, mes, dia] = this.fGroup.value.dataInicio.split("-");
     let d  = new Date(ano,mes - 1,dia,0,0,0);
-    console.log("d.getDay()",d.getDay());
 
     this.fGroup.controls.diaSemana.setValue(this.weekday[d.getDay()]);
 
@@ -213,7 +229,7 @@ export class AddSessaoPage implements OnInit {
   
   async salvarDados() {
 
-    console.log("this.verificaHorario()",this.verificaHorario())
+    //console.log("this.verificaHorario()",this.verificaHorario())
 
     if(this.verificaHorario()){
       this.servicos.presentToast('Ops... Já existe agenda para este horário!',3000);
@@ -226,8 +242,11 @@ export class AddSessaoPage implements OnInit {
       let minuto = parseInt(this.fGroup.value.hora.substr(3,2));
   
       let dataGerada  = new Date(ano,mes - 1,dia,hora,minuto,0);
-      this.pacienteId = this.fGroup.value.pacienteId;
-      this.nomePaciente = this.pacientes.find(p => p.id == this.pacienteId).nome;
+      // this.pacienteId = this.fGroup.value.pacienteId;
+      // this.nomePaciente = this.pacientes.find(p => p.id == this.pacienteId).nome;
+
+      this.nomePaciente = this.fGroup.value.nomePaciente;
+      this.pacienteId = this.pacientes.find(p => p.nome == this.nomePaciente).id;
   
       let atendimento = this.pacientes.find(p => p.id == this.pacienteId).atendimento;
       let nomeConvenio = "";
@@ -244,8 +263,8 @@ export class AddSessaoPage implements OnInit {
         pacienteId: this.pacienteId,
         nomePaciente: this.nomePaciente,
         numeroGuia: "",
-        psicologo: this.psicologo,
-        crp: this.crp,
+        psicologo: this.fGroup.value.psicologo,
+        crp: this.fGroup.value.crp,
         dataSessao: dia.toString() + "/" + mes.toString() + "/" + ano.toString(),
         dataSessaoStamp: new Date(Number(ano),Number(mes) - 1,Number(dia),0,0,0).getTime(),
         diaSemana: this.fGroup.value.diaSemana,
@@ -253,13 +272,14 @@ export class AddSessaoPage implements OnInit {
         mes: mes.toString(),
         ano: ano.toString(),
         horaSessao: this.fGroup.value.hora,
-        frequencia: "",
-        conteudo: "",
-        evolucao: "",
+        frequencia: this.sessao.frequencia ? this.sessao.frequencia : "",
+        conteudo: this.sessao.conteudo ? this.sessao.conteudo : "",
+        evolucao: this.sessao.evolucao ? this.sessao.evolucao : "",
         userId: "100",
         atendimento,
         valor,
-        nomeConvenio
+        nomeConvenio,
+        sala: this.fGroup.value.sala
       }
 
       console.log("sessao",sessao);
@@ -269,67 +289,98 @@ export class AddSessaoPage implements OnInit {
         if(this.sessaoId){
           await this.sessaoService.updateSessao(this.sessaoId,sessao);
         }else{
-          await this.sessaoService.addSessao(sessao);
+          this.sessaoService.novaSessao = {
+            new: true,
+            sessao
+          }
+          const resId = (await this.sessaoService.addSessao(sessao)).id;
+
+          let psicor = 
+            this.servicos.Psicores.find(c => c.crp == sessao.crp) 
+            ? this.servicos.Psicores.find(c => c.crp == sessao.crp).cor 
+            : '#ffffff';
+
+          sessao.id = resId;
+          this.sessaoService.setaNoArrayDaAgenda(sessao, psicor);
         }
 
-        await this.loading.dismiss();
         this.navCtrl.back();
+        this.sessaoService.sessaoAdicionada = true;
+        await this.loading.dismiss();
   
-        for (let index = 2; index <= parseInt(this.fGroup.value.qtdeSessoes); index++) {
+        // for (let index = 2; index <= parseInt(this.fGroup.value.qtdeSessoes); index++) {
   
-          let proximaData = dataGerada.setDate(dataGerada.getDate() + 7);
-          let dia = new Date(proximaData).getDate();
-          let mes = new Date(proximaData).getMonth() + 1;
-          let ano = new Date(proximaData).getFullYear();
+        //   let proximaData = dataGerada.setDate(dataGerada.getDate() + 7);
+        //   let dia = new Date(proximaData).getDate();
+        //   let mes = new Date(proximaData).getMonth() + 1;
+        //   let ano = new Date(proximaData).getFullYear();
   
-          let sessao: Sessao = {
-            pacienteId: this.pacienteId,
-            nomePaciente: this.nomePaciente,
-            numeroGuia: "",
-            psicologo: this.psicologo,
-            crp: this.crp,
-            dataSessao: dia + "/" + mes + "/" + ano,
-            diaSemana: this.fGroup.value.diaSemana,
-            dia: dia.toString(),
-            mes: mes.toString(),
-            ano: ano.toString(),       
-            horaSessao: this.fGroup.value.hora,
-            frequencia: "",
-            conteudo: "",
-            evolucao: "",
-            userId: "100"
-          }
-          try {
-            await this.sessaoService.addSessao(sessao);
-            //await this.modalController.dismiss();
-            //console.log("sessao " + index + ":", JSON.stringify(sessao));
-          } catch (error) {
-            console.log("addSessao(sessao) " + index + ":",error);
-          }
-        }
+        //   let sessao: Sessao = {
+        //     pacienteId: this.pacienteId,
+        //     nomePaciente: this.nomePaciente,
+        //     numeroGuia: "",
+        //     psicologo: this.fGroup.value.psicologo,
+        //     crp: this.fGroup.value.crp,
+        //     dataSessao: dia + "/" + mes + "/" + ano,
+        //     diaSemana: this.fGroup.value.diaSemana,
+        //     dia: dia.toString(),
+        //     mes: mes.toString(),
+        //     ano: ano.toString(),       
+        //     horaSessao: this.fGroup.value.hora,
+        //     frequencia: this.sessao.frequencia ? this.sessao.frequencia : "",
+        //     conteudo: this.sessao.conteudo ? this.sessao.conteudo : "",
+        //     evolucao: this.sessao.evolucao ? this.sessao.evolucao : "",
+        //     userId: "100",
+        //     sala: this.fGroup.value.sala
+        //   }
+        //   try {
+        //     await this.sessaoService.addSessao(sessao);
+        //     //await this.modalController.dismiss();
+        //     //console.log("sessao " + index + ":", JSON.stringify(sessao));
+        //   } catch (error) {
+        //     console.log("addSessao(sessao) " + index + ":",error);
+        //   }
+        // }
       } catch (error) {
         console.log("addSessao(sessao) 1:",error);
       }
     }
   }  
 
-
   verificaHorario(){
     let [ano, mes, dia] = this.fGroup.value.dataInicio.split("-");
     let data = [dia,mes,ano].join("/");
-    let mesmasDataHora = this.todasSessoes.filter((s:Sessao) => { 
-      return s.dataSessao == data && s.horaSessao == this.fGroup.value.hora 
+    let mesmasDataHoraSala = this.todasSessoes.filter((s:Sessao) => { 
+      return s.dataSessao == data && s.horaSessao == this.fGroup.value.hora && s.sala == this.fGroup.value.sala
     }).length;
-    return mesmasDataHora > 0;
+    return mesmasDataHoraSala > 0;
   }
 
-  pegandoSessoes(){
-    this.sessaoSubscription = this.sessaoService.getSessoesAgendadas(this.crp)
-    .subscribe((data: Array<Sessao>) => {
-      this.todasSessoes = data;
+  setarCPR(selecionado:string){
+    let crp = this.psicologos.find((p:Psicologo) => p.nome == selecionado).crp.toString();
+    this.fGroup.controls.crp.setValue(crp);
+    this.carregarPacientesDoPsicologo(crp);
+    this.pegandoSessoesDoPsicologo(crp)
+  }
+
+  carregarPacientesDoPsicologo(crp:string){
+    this.pacientesSubscription = this.pacienteService.getPacientesPorCRP(crp).subscribe(data => {
+      this.pacientes = data.sort((a,b) => { return a.nome < b.nome ? -1 : 1 });
     });
   }
 
+  pegandoSessoesDoPsicologo(crp:string){
+    this.sessaoSubscription = this.sessaoService.getSessoesAgendadas(crp)
+    .subscribe((data: Array<Sessao>) => {
+      this.todasSessoes = data;
+      console.log("this.todasSessoes",this.todasSessoes);
+    });
+  }
+
+  voltar(){
+    this.sessaoService.sessaoAdicionada = false;
+    this.navCtrl.back();
+  }
 
 
 }

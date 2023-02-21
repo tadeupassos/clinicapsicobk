@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button (click)="voltar()"></ion-back-button>
     </ion-buttons>  
     <ion-title>Cadastro de Sessão</ion-title>
   </ion-toolbar>
@@ -10,20 +10,26 @@
 <ion-content>
   <form [formGroup]="fGroup" class="ion-padding">
 
-    <ion-row>
+    <ion-row style="margin-top: -25px;">
       <ion-col size="12">
-        {{ psicologo }}
+        <ion-text><h5>Psicologo <ion-text color="danger">*</ion-text></h5></ion-text>        
+        <select formControlName="psicologo" class="campo" (ngModelChange)="setarCPR($event)">
+          <option *ngFor="let p of psicologos" [value]="p.nome" selected>{{ p.nome }}</option>
+        </select>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.psicologo.errors">
+          <span *ngIf="fGroup.controls.psicologo.errors.required && fGroup.controls.psicologo.touched">Esse campo é obrigatório</span>
+        </div>    
       </ion-col>
     </ion-row>
     <br>
     <ion-row style="margin-top: -25px;">
       <ion-col size="12">
         <ion-text><h5>Paciente <ion-text color="danger">*</ion-text></h5></ion-text>
-        <select formControlName="pacienteId" class="campo">
-          <option *ngFor="let p of pacientes" [value]="p.id">{{ p.nome }}</option>
+        <select formControlName="nomePaciente" class="campo">
+          <option *ngFor="let p of pacientes" [value]="p.nome">{{ p.nome }}</option>
         </select>
-        <div class="mensagemValidacao" *ngIf="fGroup.controls.pacienteId.errors">
-          <span *ngIf="fGroup.controls.pacienteId.errors.required && fGroup.controls.pacienteId.touched">Esse campo é obrigatório</span>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.nomePaciente.errors">
+          <span *ngIf="fGroup.controls.nomePaciente.errors.required && fGroup.controls.nomePaciente.touched">Esse campo é obrigatório</span>
         </div>                
       </ion-col>
     </ion-row>
@@ -46,7 +52,7 @@
         
         <!-- <ion-input style="width: 120px;" type="text" maxlength="10" formControlName="dataInicio" class="campo" (ionBlur)="geraDataFim()" (keypress)="dataInicioMascara($event)"></ion-input> -->
 
-        <ion-input (ionChange)="geraDataFim()" style="width: 175px; font-size: 20px; height: 40px;" type="date" formControlName="dataInicio" class="campo"></ion-input>
+        <ion-input (ionChange)="geraDataFim()" style="width: 175px; font-size: 20px; height: 40px;" type="date" formControlName="dataInicio" class="campo diaSemana" readonly></ion-input>
 
         <div class="mensagemValidacao" *ngIf="fGroup.controls.dataInicio.errors">
           <span *ngIf="fGroup.controls.dataInicio.errors.required && fGroup.controls.dataInicio.touched">Esse campo é obrigatório</span>
@@ -80,23 +86,37 @@
 
       <ion-col size="6">
         <ion-text><h5>Horário <ion-text color="danger">*</ion-text></h5></ion-text>
-        <ion-input #horario style="width: 75px; font-size: 19px;" type="tel" maxlength="5" formControlName="hora" class="campo" [brmasker]="{mask: '00:00', type:'num'}"></ion-input>
+        <ion-input #horario style="width: 75px; font-size: 19px;" type="tel" maxlength="5" formControlName="hora" class="campo diaSemana" [brmasker]="{mask: '00:00', type:'num'}" readonly></ion-input>
         <div class="mensagemValidacao" *ngIf="fGroup.controls.hora.errors">
           <span *ngIf="fGroup.controls.hora.errors.required && fGroup.controls.hora.errors.touched">Esse campo é obrigatório</span>
           <span *ngIf="fGroup.controls.hora.errors.pattern">Formato de e-mail inválido</span>
         </div>
       </ion-col>
     </ion-row>
+
+    <ion-row style="margin-top: -25px;">
+      <ion-col size="12">
+        <ion-text><h5>Sala <ion-text color="danger">*</ion-text></h5></ion-text>        
+        <select formControlName="sala" class="campo diaSemana" readonly>
+          <option value="1">Sala 1</option>
+          <option value="2">Sala 2</option>
+          <option value="3">Sala 3</option>
+        </select>
+        <div class="mensagemValidacao" *ngIf="fGroup.controls.sala.errors">
+          <span *ngIf="fGroup.controls.sala.errors.required && fGroup.controls.sala.touched">Esse campo é obrigatório</span>
+        </div>    
+      </ion-col>
+    </ion-row>
+
     <br>
     <br>
-    <ion-row>
+    <ion-row *ngIf="!sessaoId">
       <ion-col size="4">
         <ion-button [disabled]="!fGroup.valid" (click)="salvarDados()" expand="block" size="large">
           Gravar
         </ion-button>
       </ion-col>
     </ion-row>
-
   </form>
 </ion-content>
 

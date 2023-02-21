@@ -14,6 +14,10 @@ export class MenuPage implements OnInit {
 
   pages = [
     {
+      title: 'Agenda Geral',
+      url: '/menu/agenda-geral'
+    },
+    {
       title: 'Pacientes',
       url: '/menu/pacientes'
     },
@@ -40,8 +44,8 @@ export class MenuPage implements OnInit {
   constructor(private router: Router, private modalController: ModalController, public serv: ServicosService) {
     this.router.events.subscribe((event: RouterEvent) => {
 
-      if (typeof event.url === 'undefined' || event.url == '/' || event.url == "/menu/cadpaciente") {
-        this.selectedPath = '/menu/pacientes';
+      if (typeof event.url === 'undefined' || event.url == '/' || event.url == "/menu/agenda-geral") {
+        this.selectedPath = '/menu/agenda-geral';
       } else {
         this.selectedPath = event.url;
       }
@@ -49,7 +53,7 @@ export class MenuPage implements OnInit {
   }
 
   ngOnInit() {
-
+    this.setaPermissao();
   }
 
   sair() {
@@ -59,12 +63,17 @@ export class MenuPage implements OnInit {
   }
 
   async abrirTipoFrequencia() {
+    this.setaPermissao();
     const modal = await this.modalController.create({
       component: ListaFrequenciaPage,
       backdropDismiss: false
     });
 
     return await modal.present();
+  }
+
+  setaPermissao(){
+    this.serv.permissao = localStorage["logado"] == "fernando.lira";
   }
 
 }

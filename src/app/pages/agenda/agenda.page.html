@@ -2,31 +2,35 @@
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
-    </ion-buttons>  
-    <ion-title>Sessões Agendadas</ion-title>
+    </ion-buttons>
+    <ion-title>Sessões - {{ psicologo.nome }}</ion-title>
+    <!-- <ion-buttons slot="end">
+      <ion-button style="margin-right: 35px;" [routerLink]="['/menu/add-sessao']" fill="solid" color="success">
+        Cadastrar Sessão
+      </ion-button>
+    </ion-buttons> -->
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-row style="border-bottom: 1px solid gray;">
-    <ion-col class="flex-left" size="6">
-      {{ psicologo.nome }}
-    </ion-col>
-    <ion-col class="flex-right">
-      <ion-button style="margin-right: 35px;" [routerLink]="['/menu/add-sessao']"  color="success">
-        Cadastrar Sessão
-      </ion-button>
-    </ion-col>
-  </ion-row>
 
-  <ion-row>
-    <ion-col *ngFor="let g of agrupadoData" size="4">
+  <ion-segment [(ngModel)]="segmentModel">
+    <ion-segment-button value="agenda">
+      <ion-label>Sessões Agendadas</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="finalizada">
+      <ion-label>Sessões Finalizadas</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-row *ngIf="segmentModel == 'agenda'">
+    <ion-col *ngFor="let g of agrupadoAgenda" size="4">
       <ion-card>
         <ion-item-group>
           <ion-item-divider>
             <ion-label class="dataSemana">{{ g[1][0].diaSemana }}, <strong>{{ g[0] }}</strong> </ion-label>
           </ion-item-divider>
-    
+
           <ion-item-sliding *ngFor="let s of g[1]">
             <!-- [routerLink]="['/menu/add-sessao',s.id]" -->
             <ion-item (click)="setarAtendimento(s.id)">
@@ -37,11 +41,11 @@
               </ion-row>
               <ion-icon slot="end" name="arrow-forward"></ion-icon>
             </ion-item>
-    
+
             <ion-item-options side="start">
-              <ion-item-option color="primary" [routerLink]="['/menu/add-sessao',s.id]">
+              <!-- <ion-item-option color="primary" [routerLink]="['/menu/add-sessao',s.id]">
                 <ion-icon slot="icon-only" name="create"></ion-icon>
-              </ion-item-option>
+              </ion-item-option> -->
               <ion-item-option color="danger" (click)="excluir(s.id)">
                 <ion-icon slot="icon-only" name="trash"></ion-icon>
               </ion-item-option>
@@ -53,6 +57,78 @@
   </ion-row>
 
 
-  
+  <div *ngIf="segmentModel == 'finalizada'">
+    <form [formGroup]="fGroup" class="ion-padding">
+      <ion-row style="margin-left: 10px">
+        <ion-col size="2">
+          <select style="width: 190px;" formControlName="mes" class="campo">
+            <option value="1">Janeiro</option>
+            <option value="2">Fevereito</option>
+            <option value="3">Março</option>
+            <option value="4">Abril</option>
+            <option value="5">Maio</option>
+            <option value="6">Junho</option>
+            <option value="7">Julho</option>
+            <option value="8">Agosto</option>
+            <option value="9">Setembro</option>
+            <option value="10">Outubro</option>
+            <option value="11">Novembro</option>
+            <option value="12">Dezembro</option>
+          </select>
+        </ion-col>
+        <ion-col size="6">
+          <select formControlName="ano" class="campo">
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+            <option value="2027">2027</option>
+            <option value="2028">2028</option>
+            <option value="2029">2029</option>
+            <option value="2030">2030</option>
+          </select>
+        </ion-col>
+      </ion-row>
+    </form>
+    <ion-row>
+      <ion-col *ngFor="let g of agrupadoFinalizada" size="4">
+        <ion-card>
+          <ion-item-group>
+            <ion-item-divider>
+              <ion-label class="dataSemana">{{ g[1][0].diaSemana }}, <strong>{{ g[0] }}</strong> </ion-label>
+            </ion-item-divider>
+
+            <ion-item-sliding *ngFor="let s of g[1]">
+              <!-- [routerLink]="['/menu/add-sessao',s.id]" -->
+              <ion-item (click)="setarAtendimento(s.id)">
+                <ion-row>
+                  <ion-col size="12" class="paciente flex-left">
+                    <strong>{{ s.horaSessao }}</strong>&nbsp;- {{ s.nomePaciente }}
+                  </ion-col>
+                </ion-row>
+                <ion-icon slot="end" name="arrow-forward"></ion-icon>
+              </ion-item>
+
+              <ion-item-options side="start">
+                <ion-item-option color="primary" [routerLink]="['/menu/add-sessao',s.id]">
+                  <ion-icon slot="icon-only" name="create"></ion-icon>
+                </ion-item-option>
+                <ion-item-option color="danger" (click)="excluir(s.id)">
+                  <ion-icon slot="icon-only" name="trash"></ion-icon>
+                </ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding>
+          </ion-item-group>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </div>
+
+
+
+
 
 </ion-content>

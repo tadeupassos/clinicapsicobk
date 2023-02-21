@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +17,7 @@ export class FrequenciaService {
 
   getFrequencias(){
     return this.frequenciasCollection.snapshotChanges().pipe(
+      take(1),
       map(actions => {
         return actions.map(a => {
           const data = a.payload.doc.data();

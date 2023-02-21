@@ -9,6 +9,16 @@ const routes: Routes = [
     component: MenuPage,
     children: [
       {
+        path: 'agenda-geral',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../agenda-geral/agenda-geral.module').then(m => m.AgendaGeralPageModule)
+          }
+        ]
+      },
+      {
         path: 'pacientes',
         children: [
           {
@@ -197,14 +207,14 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/menu/pacientes',
+        redirectTo: '/menu/agenda-geral',
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/menu/pacientes',
+    redirectTo: '/menu/agenda-geral',
     pathMatch: 'full'
   }
 ];

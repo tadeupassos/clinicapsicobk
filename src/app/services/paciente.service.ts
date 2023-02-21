@@ -9,6 +9,7 @@ import { map, take } from 'rxjs/operators';
 export class PacienteService {
 
   private pacientesCollection: AngularFirestoreCollection<Paciente>;
+  todosPacientes: Array<Paciente>;
 
   constructor(
     private afs: AngularFirestore,
@@ -18,7 +19,7 @@ export class PacienteService {
 
   getPacientes() {
     return this.pacientesCollection.snapshotChanges().pipe(
-      //take(1),
+      take(1),
       map(actions => {
         return actions.map(a => {
           const data = a.payload.doc.data();

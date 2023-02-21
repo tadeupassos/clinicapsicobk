@@ -51,12 +51,11 @@ export class CadpacientePage implements OnInit {
 
     this.convenioSubscription = this.convenioService.getConvenios().subscribe(data => {
       this.convenios = data;
-      //console.log(data);
     });
 
     this.psicologoSubscription = this.psicologoService.getPsicologos().subscribe(data => {
       this.psicologos = data;
-      //console.log(data);
+      this.psicologos.sort((a,b) => { return a.nome < b.nome ? -1 : 1 });
     });    
 
     this.fGroup = this.fBuilder.group({
@@ -125,35 +124,40 @@ export class CadpacientePage implements OnInit {
       
       console.log("this.paciente",this.paciente);
 
-      this.fGroup = this.fBuilder.group({
-        'dataInicio': [this.paciente.dataInicio, Validators.compose([Validators.required])],
-        'atendimento': [this.paciente.atendimento, Validators.compose([Validators.required])],
-        'convenio': [this.paciente.convenio],
-        'valor': [this.paciente.valor],
-        'dataEncerrou': [this.paciente.dataEncerrou],
-        'motivoEncerrou': [this.paciente.motivoEncerrou],
-        'nome': [this.paciente.nome, Validators.compose([Validators.required,])],
-        'email': [this.paciente.email], //Validators.compose([Validators.required,Validators.pattern(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/)])],
-        'dataNascimento': [this.paciente.dataNascimento, Validators.compose([Validators.required])],
-        'celular1': [this.paciente.celular1, Validators.compose([Validators.required])],
-        'celular2': [this.paciente.celular2],
-        'telefone': [this.paciente.telefone],
-        'responsaveis': [this.paciente.responsaveis],
-        'cep': [this.paciente.cep, Validators.compose([Validators.required,Validators.minLength(8)])],
-        'cidade': [this.paciente.cidade, Validators.compose([Validators.required])],
-        'endereco': [this.paciente.endereco, Validators.compose([Validators.required])],
-        'bairro': [this.paciente.bairro, Validators.compose([Validators.required])],
-        'numero': [this.paciente.numero, Validators.compose([Validators.required])],
-        'complemento': [this.paciente.complemento],
-        'psicologo': [this.paciente.psicologo, Validators.compose([Validators.required])],
-        'crp': [this.paciente.crp, Validators.compose([Validators.required])]
-      });
+      if(this.paciente){
 
-      if(this.fGroup.value.atendimento == "Convênio"){
-        this.fGroup.get("convenio").setValidators([Validators.compose([Validators.required])]);
-      }else{
-        this.fGroup.get("valor").setValidators([Validators.compose([Validators.required])]);
+        this.fGroup = this.fBuilder.group({
+          'dataInicio': [this.paciente.dataInicio, Validators.compose([Validators.required])],
+          'atendimento': [this.paciente.atendimento, Validators.compose([Validators.required])],
+          'convenio': [this.paciente.convenio],
+          'valor': [this.paciente.valor],
+          'dataEncerrou': [this.paciente.dataEncerrou],
+          'motivoEncerrou': [this.paciente.motivoEncerrou],
+          'nome': [this.paciente.nome, Validators.compose([Validators.required,])],
+          'email': [this.paciente.email], //Validators.compose([Validators.required,Validators.pattern(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/)])],
+          'dataNascimento': [this.paciente.dataNascimento, Validators.compose([Validators.required])],
+          'celular1': [this.paciente.celular1, Validators.compose([Validators.required])],
+          'celular2': [this.paciente.celular2],
+          'telefone': [this.paciente.telefone],
+          'responsaveis': [this.paciente.responsaveis],
+          'cep': [this.paciente.cep, Validators.compose([Validators.required,Validators.minLength(8)])],
+          'cidade': [this.paciente.cidade, Validators.compose([Validators.required])],
+          'endereco': [this.paciente.endereco, Validators.compose([Validators.required])],
+          'bairro': [this.paciente.bairro, Validators.compose([Validators.required])],
+          'numero': [this.paciente.numero, Validators.compose([Validators.required])],
+          'complemento': [this.paciente.complemento],
+          'psicologo': [this.paciente.psicologo, Validators.compose([Validators.required])],
+          'crp': [this.paciente.crp, Validators.compose([Validators.required])]
+        });
+
+        if(this.fGroup.value.atendimento == "Convênio"){
+          this.fGroup.get("convenio").setValidators([Validators.compose([Validators.required])]);
+        }else{
+          this.fGroup.get("valor").setValidators([Validators.compose([Validators.required])]);
+        }
+
       }
+
     });
   }
 

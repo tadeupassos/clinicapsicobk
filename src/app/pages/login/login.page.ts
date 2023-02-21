@@ -53,6 +53,7 @@ export class LoginPage implements OnInit {
       }
     }else if(this.fGroup.get('usuario').value == "secretaria.insight"){
       if(this.fGroup.get('senha').value == "secretaria#20"){
+        this.serv.permissao = localStorage["logado"] == "fernando.lira";
         window.localStorage.setItem("logado",this.fGroup.get('usuario').value);
         this.fGroup.get('senha').setValue('');
         this.navCtrl.navigateForward('/menu');

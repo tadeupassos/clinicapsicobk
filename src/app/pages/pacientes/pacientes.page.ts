@@ -16,7 +16,6 @@ import { ServicosService } from 'src/app/services/servicos.service';
 export class PacientesPage implements OnInit {
 
   pacientes = new Array<Paciente>();
-  todosPacientes = new Array<Paciente>();
   private pacientesSubscription: Subscription;
 
   filtrarPsicologo: string = 'Selecionar';
@@ -41,16 +40,7 @@ export class PacientesPage implements OnInit {
     public serv: ServicosService
   ) { 
 
-    this.pacientesSubscription = this.pacienteService.getPacientes().subscribe(data => {
-      this.todosPacientes = data;
 
-      console.log("this.todosPacientes",this.todosPacientes);
-
-      this.todosPacientes.sort((a,b) => { return a.nome < b.nome ? -1 : 1 });
-
-      this.pacientes = this.todosPacientes;
-      this.totalPacientes = this.pacientes.length;
-    });
 
     this.psicologoSubscription = this.psicologoService.getPsicologos().subscribe(data => {
       this.psicologos = data;
@@ -67,12 +57,18 @@ export class PacientesPage implements OnInit {
 
   }
 
-  ngOnInit() {
-    
+  async ngOnInit() {
+    this.pacienteService.todosPacientes = await this.pacienteService.getPacientes().toPromise();
+
+    console.log("this.todosPacientes",this.pacienteService.todosPacientes);
+
+    this.pacienteService.todosPacientes.sort((a,b) => { return a.nome < b.nome ? -1 : 1 });
+
+    this.pacientes = this.pacienteService.todosPacientes;
+    this.totalPacientes = this.pacientes.length;
   }
 
   ionViewWillEnter(){
-    this.serv.permissao = localStorage["logado"] == "fernando.lira";
   }
 
   ngOndestroy(){
@@ -86,11 +82,11 @@ export class PacientesPage implements OnInit {
     this.buscaLetra = val;
 
     if(this.filtrarPsicologo == "Todos"){
-      this.pacientes = this.todosPacientes.filter((p:Paciente) => {
+      this.pacientes = this.pacienteService.todosPacientes.filter((p:Paciente) => {
         return p.nome.toLowerCase().indexOf(val.toLowerCase()) > -1;
       });
      }else{
-      this.pacientes = this.todosPacientes.filter((p:Paciente) => {
+      this.pacientes = this.pacienteService.todosPacientes.filter((p:Paciente) => {
         return p.nome.toLowerCase().indexOf(val.toLowerCase()) > -1 && 
                p.psicologo == this.filtrarPsicologo;
       });
@@ -104,19 +100,19 @@ export class PacientesPage implements OnInit {
 
     if(this.filtrarPsicologo == "Todos"){
       if(this.buscaLetra == ''){
-        this.pacientes = this.todosPacientes;
+        this.pacientes = this.pacienteService.todosPacientes;
       }else{
-        this.pacientes = this.todosPacientes.filter((p:Paciente) => {
+        this.pacientes = this.pacienteService.todosPacientes.filter((p:Paciente) => {
           return p.nome.toLowerCase().indexOf(this.buscaLetra.toLowerCase()) > -1;
         });
       }
       
     }else if(this.buscaLetra == ''){
-      this.pacientes = this.todosPacientes.filter((p:Paciente) => {
+      this.pacientes = this.pacienteService.todosPacientes.filter((p:Paciente) => {
         return p.psicologo == this.filtrarPsicologo;
       });
     }else{
-      this.pacientes = this.todosPacientes.filter((p:Paciente) => {
+      this.pacientes = this.pacienteService.todosPacientes.filter((p:Paciente) => {
         return p.psicologo == this.filtrarPsicologo && 
                p.nome.toLowerCase().indexOf(this.buscaLetra.toLowerCase()) > -1;
       });

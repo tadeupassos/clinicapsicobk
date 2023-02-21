@@ -8,6 +8,7 @@ import { Sessao } from 'src/app/interfaces/sessao';
 import { SessaoService } from 'src/app/services/sessao.service';
 import { ServicosService } from 'src/app/services/servicos.service';
 import { resolve } from 'url';
+import { FrequenciaService } from 'src/app/services/frequencia.service';
 
 @Component({
   selector: 'app-fechamento',
@@ -32,6 +33,8 @@ export class FechamentoPage implements OnInit {
 
   resultadoSubscription: Subscription; 
 
+  frequenciaSubscription: Subscription;
+
   particular: any = {
     qtde: 0,
     valor: 0,
@@ -41,7 +44,8 @@ export class FechamentoPage implements OnInit {
   convenio: any = {
     qtde: 0,
     valor: 0,
-    repasse: 0
+    repasse: 0,
+    naoRepasse: 0
   }
 
   qtdeSessoes = 0;
@@ -50,11 +54,23 @@ export class FechamentoPage implements OnInit {
   resumo = [];
   convAtend = [];
 
+  listaNaoRepasse = [];
+
+  chkPresenca = true;
+  chkFaltaPaciente = false;
+  chkFaltaJustificadaPaciente = false;
+  chkFaltaTerapeuta = false;
+  chkFaltaJustificadaTerapeuta = false;
+  chkRecessosFeriados = false;
+  chkManutencaoPredial = false;
+  chkReposicao = false;
+
   constructor(
     private convenioService: ConvenioService,
     private psicologoService: PsicologoService,
     private sessaoService: SessaoService,
-    private servicos: ServicosService
+    private servicos: ServicosService,
+    private frequenciaServ: FrequenciaService
   ) {
     this.convenioSubscription = this.convenioService.getConvenios().subscribe((c:Array<Convenio>) => {
       this.convenios = c;
@@ -72,6 +88,11 @@ export class FechamentoPage implements OnInit {
 
     this.getSessoesPorPsic();
 
+    this.frequenciaSubscription = this.frequenciaServ.getFrequencias()
+    .subscribe((frequencias:any) => {
+      this.listaNaoRepasse = frequencias.filter(f => f.repasse == "N");
+    });
+
    }
 
   ngOnInit() {
@@ -81,11 +102,11 @@ export class FechamentoPage implements OnInit {
   ngOndestroy() {
     this.convenioSubscription.unsubscribe();
     this.psicologoSubscription.unsubscribe();
+    this.frequenciaSubscription.unsubscribe();
     if(this.resultadoSubscription) this.resultadoSubscription.unsubscribe();
   }
 
   async filtrar(){
-    console.log("filtrar", this.filtro);
     await this.servicos.presentLoading();
     this.resultadoSubscription = this.sessaoService.getSessaoPorFiltro(this.filtro)
     .subscribe((sessoes:Array<Sessao>) => {
@@ -101,6 +122,11 @@ export class FechamentoPage implements OnInit {
       let convenio = sessoes.filter((f:Sessao) => { return f.atendimento == "Convênio" });
       this.convenio.qtde = convenio.length;
       convenio.forEach((c:Sessao) => {
+        
+        if(!c.valor){
+          c.valor = this.convenios.find((conv:Convenio) => conv.convenio == c.nomeConvenio).valor;
+        }
+
         this.convenio.valor += Number(c.valor.replace(",","."));
         this.convenio.repasse += Number(this.servicos.cobranca.Repasse.replace(",","."));
       });
@@ -108,6 +134,11 @@ export class FechamentoPage implements OnInit {
       let particular = sessoes.filter((f:Sessao) => { return f.atendimento == "Particular" });
       this.particular.qtde = particular.length;
       particular.forEach((c:Sessao) => {
+
+        if(!c.valor){
+          c.valor = this.convenios.find((conv:Convenio) => conv.convenio == c.nomeConvenio).valor;
+        }
+
         this.particular.valor += Number(c.valor.replace(",","."));
         this.particular.subLocacao += Number(this.servicos.cobranca.Sublocacao.replace(",","."));
       });
@@ -132,6 +163,7 @@ export class FechamentoPage implements OnInit {
             valorConvenio: 0,
             repasse: 0,
             convenios: [],
+            naoRepasse: 0,
 
             faltaPaciente: convenio.filter((f:Sessao) => { return f.frequencia == "Falta Paciente" }).length,
             faltaJustificadaPaciente: convenio.filter((f:Sessao) => { 
@@ -184,13 +216,37 @@ export class FechamentoPage implements OnInit {
             }
           });
 
-          // tratamento para falta do terapeuta
-          let naoRepasse = psico.faltaTerapeuta * Number(this.servicos.cobranca.Repasse.replace(",","."));
+          /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+          // Tratamento para quando tem tipos de frequencias setados para não repassar
+          let naoRepasse = 0;
+          let valorRepasse = Number(this.servicos.cobranca.Repasse.replace(",","."));
+          // if(this.listaNaoRepasse.find(t => t.tipo == "Falta Paciente")) naoRepasse += psico.faltaPaciente * valorRepasse;
+          // if(this.listaNaoRepasse.find(t => t.tipo == "Falta Justificada Paciente")) naoRepasse += psico.faltaJustificadaPaciente * valorRepasse;
+          // if(this.listaNaoRepasse.find(t => t.tipo == "Falta Terapeuta")) naoRepasse += psico.faltaTerapeuta * valorRepasse;
+          // if(this.listaNaoRepasse.find(t => t.tipo == "Falta Justificada Terapeuta")) naoRepasse += psico.faltaJustificadaTerapeuta * valorRepasse;
+          // if(this.listaNaoRepasse.find(t => t.tipo == "Recessos e Feriados")) naoRepasse += psico.recessosFeriados * valorRepasse;
+          // if(this.listaNaoRepasse.find(t => t.tipo == "Manutenção Predial")) naoRepasse += psico.manutencaoPredial * valorRepasse;
+          // if(this.listaNaoRepasse.find(t => t.tipo == "Reposição")) naoRepasse += psico.reposicao * valorRepasse;
+
+          if(!this.chkPresenca) naoRepasse += psico.presencaC * valorRepasse;
+          if(!this.chkFaltaPaciente) naoRepasse += psico.faltaPaciente * valorRepasse;
+          if(!this.chkFaltaJustificadaPaciente) naoRepasse += psico.faltaJustificadaPaciente * valorRepasse;
+          if(!this.chkFaltaTerapeuta) naoRepasse += psico.faltaTerapeuta * valorRepasse;
+          if(!this.chkFaltaJustificadaTerapeuta) naoRepasse += psico.faltaJustificadaTerapeuta * valorRepasse;
+          if(!this.chkRecessosFeriados) naoRepasse += psico.recessosFeriados * valorRepasse;
+          if(!this.chkManutencaoPredial) naoRepasse += psico.manutencaoPredial * valorRepasse;
+          if(!this.chkReposicao) naoRepasse += psico.reposicao * valorRepasse;
+
+          console.log("Não repasse", naoRepasse);
+          console.log("psico.repasse", psico.repasse);
+          console.log("this.convenio.repasse", this.convenio.repasse);
           psico.repasse = psico.repasse - naoRepasse;
-          psico.qtdeConvenio = psico.qtdeConvenio - psico.faltaTerapeuta;
+          psico.naoRepasse = naoRepasse;
+          this.convenio.naoRepasse = naoRepasse;
           this.convenio.repasse = this.convenio.repasse - naoRepasse;
           
           this.resumo.push(psico);
+          /////////////////////////////////////////////////////////////////////////////////////////////////////////////
         }
 
       });

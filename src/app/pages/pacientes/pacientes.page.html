@@ -27,11 +27,11 @@
 
 <ion-content class="ion-padding">
 
-  <!-- <ion-fab [routerLink]="['/menu/cadpaciente']" horizontal="end" vertical="top" slot="fixed" edge style=" margin-right: 50px">
+  <ion-fab [routerLink]="['/menu/cadpaciente']" horizontal="end" vertical="top" slot="fixed" edge style=" margin-right: 50px">
     <ion-fab-button color="success" ion-fab>
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
-  </ion-fab>     -->
+  </ion-fab>    
 
   <!-- <button class="botao sessoes" [routerLink]="['/menu/sessoes',p.id]">
     Sessões
@@ -51,6 +51,9 @@
 
     <ion-row *ngFor="let p of pacientes" class="cartao linhaDebaixo">
       <ion-col size="1" class="flex-left">
+        <button *ngIf="!serv.permissao" class="botao prontuario">
+          {{ p.prontuario.codigo }}
+        </button> 
         <button *ngIf="serv.permissao" class="botao prontuario" [routerLink]="['/menu/prontuario',p.id]">
           {{ p.prontuario.codigo }}
         </button>    

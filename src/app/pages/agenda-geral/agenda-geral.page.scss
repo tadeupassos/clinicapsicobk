@@ -1,0 +1,62 @@
+.campo {
+    background-color: var(--ion-color-primary);
+    margin-left: 5px;
+    border: 1px solid white;
+    border-radius: 2px;
+    padding: 2px;
+}
+
+.filtrarMes {
+    font-size: 16px;
+    border: 1px solid white;
+    border-radius: 3px;
+    padding: 8px;
+}
+
+.borda1 {
+    border: 1px solid black;
+}
+
+.borda2 {
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.heightCell {
+    height: 50px;
+}
+
+.fontSizeHeader {
+    font-size: 14px;
+}
+
+.diaSemana {
+    height: auto;
+    background-color: #fff;
+    display: inline-block;
+    width: 500px;
+}
+
+.sizeCell {
+    font-size: 12px;
+    white-space: pre-wrap;
+}
+
+.paddingCell {
+    padding: 2px 0px;
+}
+
+.fundoCinza {
+    background-color: #e2e2e2;
+}
+
+.copiarSemana {
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 2px 15px;
+    margin-right: 50px;
+    background-color: #ff00ded9;
+    color: white;
+    cursor: pointer;
+}

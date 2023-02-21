@@ -12,8 +12,7 @@
     <ion-content>
       <ion-list>
         <ion-menu-toggle auto-hide="false" *ngFor="let p of pages">
-
-          <ion-item [routerLink]="p.url" routerDirection="root" [class.active-item]="selectedPath === p.url">
+          <ion-item (click)="setaPermissao()" [routerLink]="p.url" routerDirection="root" [class.active-item]="selectedPath === p.url">
             {{ p.title }}
           </ion-item>
         </ion-menu-toggle>
@@ -26,7 +25,7 @@
         Sair
       </ion-item>
       <div class="versao">
-        Versão 0.1.54
+        Versão 0.1.62
       </div>
     </ion-content>
   </ion-menu>

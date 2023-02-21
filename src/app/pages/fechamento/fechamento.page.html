@@ -53,6 +53,64 @@
         </ion-button>
       </ion-col>
     </ion-row>
+
+    <div class="repasse">
+      <!-- <div class="repasseLinha"></div> -->
+      <div class="textoRepasse">O que vai ser repasse?</div>
+      <ion-row>
+        <ion-col size="2">
+          <div class="flex-left">
+            <ion-checkbox [(ngModel)]="chkPresenca" style="margin-right: 4px;"></ion-checkbox>
+            <div class="textoChk">Presença</div>
+          </div>
+        </ion-col>
+        <ion-col size="2">
+          <div class="flex-left">
+            <ion-checkbox [(ngModel)]="chkReposicao" style="margin-right: 4px;"></ion-checkbox>
+            <div class="textoChk">Reposição</div>
+          </div>
+        </ion-col>
+        <ion-col size="2">
+          <div class="flex-left">
+            <ion-checkbox [(ngModel)]="chkRecessosFeriados" style="margin-right: 4px;"></ion-checkbox>
+            <div class="textoChk">Recessos e Feriados</div>
+          </div>
+        </ion-col>
+        <ion-col size="2">
+          <div class="flex-left">
+            <ion-checkbox [(ngModel)]="chkManutencaoPredial" style="margin-right: 4px;"></ion-checkbox>
+            <div class="textoChk">Manutenção Predial</div>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="2">
+          <div class="flex-left">
+            <ion-checkbox [(ngModel)]="chkFaltaPaciente" style="margin-right: 4px;"></ion-checkbox>
+            <div class="textoChk">Falta Paciente</div>
+          </div>
+        </ion-col>
+        <ion-col size="2">
+          <div class="flex-left">
+            <ion-checkbox [(ngModel)]="chkFaltaJustificadaPaciente" style="margin-right: 4px;"></ion-checkbox>
+            <div class="textoChk">Falta Justificada Paciente</div>
+          </div>
+        </ion-col>
+        <ion-col size="2">
+          <div class="flex-left">
+            <ion-checkbox [(ngModel)]="chkFaltaTerapeuta" style="margin-right: 4px;"></ion-checkbox>
+            <div class="textoChk">Falta Terapeuta</div>
+          </div>
+        </ion-col>
+        <ion-col size="3">
+          <div class="flex-left">
+            <ion-checkbox [(ngModel)]="chkFaltaJustificadaTerapeuta" style="margin-right: 4px;"></ion-checkbox>
+            <div class="textoChk">Falta Justificada Terapeuta</div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+
   </div>
 
   <ion-row>
@@ -150,14 +208,17 @@
               Presença: <strong>{{ r.presencaC }}</strong><br>
               Falta Paciente: <strong>{{ r.faltaPaciente }}</strong><br>
               Falta Justificada Paciente: <strong>{{ r.faltaJustificadaPaciente }}</strong><br>
-              <span [ngStyle]="{'color' : r.faltaTerapeuta ? 'red' : '#048243' }">
-                Falta Terapeuta: <strong>{{ r.faltaTerapeuta }}</strong>
-              </span><br> 
+              Falta Terapeuta: <strong>{{ r.faltaTerapeuta }}</strong><br>
               Falta Justificada Terapeuta: <strong>{{ r.faltaJustificadaTerapeuta }}</strong><br>
               Recessos e Feriados: <strong>{{ r.recessosFeriados }}</strong><br>
               Manutenção Predial: <strong>{{ r.manutencaoPredial }}</strong><br>
               Reposição: <strong>{{ r.reposicao }}</strong><br>
               <br>
+              <span style="color : red">
+                Total de não repasse <strong>{{ r.naoRepasse | currency:'BRL' }}</strong><br>
+              </span>
+              <br>
+
               <div style="color: #013018;">
                 Falta: <strong>{{ r.faltaC }}</strong><br>
                 Falta Justificada: <strong>{{ r.faltaJc }}</strong><br>

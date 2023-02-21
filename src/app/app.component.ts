@@ -16,12 +16,12 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private servicos: ServicosService
+    private servicos: ServicosService,
   ) {
     this.initializeApp();
   }
 
-  initializeApp() {
+  async initializeApp() {
     //localStorage.removeItem("logado");
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
@@ -32,6 +32,11 @@ export class AppComponent {
         }
         console.log("this.servicos.cobranca",this.servicos.cobranca);
       })
+    });
+
+    this.servicos.pegarPsicor().subscribe(c => {
+      this.servicos.Psicores = c; 
+      console.log("this.servicos.psiCor",this.servicos.Psicores);
     });
   }
 }
