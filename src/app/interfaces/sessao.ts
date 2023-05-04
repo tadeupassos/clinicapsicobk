@@ -23,4 +23,5 @@ export interface Sessao {
     nomeConvenio?: string;
     dtTimeStamp?: string;
     sala?: string;
+    passouCartao?: boolean;
 }

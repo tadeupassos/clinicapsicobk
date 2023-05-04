@@ -115,8 +115,9 @@ export class SessaoService {
       .where('crp', '==', crp)
       .where('mes', '==', mes)
       .where('ano', '==', ano)
-      .where('frequencia', 'in', ['Presença', 'Falta Paciente', 'Falta Justificada Paciente', 'Falta Terapeuta', 'Falta Justificada Terapeuta', 'Recessos e Feriados', 'Manutenção Predial', 'Reposição'])
+      .where('frequencia', 'in', ['Presença', 'Falta Paciente', 'Falta Justificada Paciente', 'Falta Terapeuta', 'Falta Justificada Terapeuta', 'Recessos e Feriados', 'Manutenção Predial', 'Reposição', 'Falta', 'Falta Justificada'])
     ).snapshotChanges().pipe(
+      take(1),
       map(actions => {
         return actions.map(a => {
           const data = a.payload.doc.data();

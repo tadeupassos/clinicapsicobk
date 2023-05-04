@@ -122,11 +122,21 @@
                     (press)="remover(s.sala1.sessaoInteira, s.sala1.sessaoId)" 
                     (click)="setarAtendimento(s.sala1.sessaoId)"
                   >
+                    <span 
+                      class="nomeConvenio" 
+                      [ngStyle]="{'color': s.sala1.mostrar.convenio == 'UNIMED' ? '#00995D' : 'INTERMÉDICA' ? '#f49e00' : 'gray' }" >
+                      {{ s.sala1.mostrar.convenio }}
+                    </span><br>
                     <span><b>{{ s.sala1.mostrar.paciente }}</b></span><br>
                     <span style="color: rgb(94, 94, 94)">{{ s.sala1.mostrar.psicologo }}</span>
                   </div>
-                  <div *ngIf="s.sala1.mostrar != '+' && s.sala1.mostrar.frequencia != ''">
-                    <div>
+                  <div style="cursor: pointer;" *ngIf="s.sala1.mostrar != '+' && s.sala1.mostrar.frequencia != ''">
+                    <div (tap)="setarPassouCartao(s.sala1.sessaoInteira, s.sala1.sessaoId)" >
+                      <span 
+                        class="nomeConvenio" 
+                        [ngStyle]="{'color': s.sala1.mostrar.convenio == 'UNIMED' ? '#00995D' : 'INTERMÉDICA' ? '#f49e00' : 'gray' }" >
+                        {{ s.sala1.mostrar.convenio }} <ion-icon *ngIf="s.sala1.mostrar.passouCartao" name="card"></ion-icon>
+                      </span><br>
                       <span><b>{{ s.sala1.mostrar.paciente }}</b></span><br>
                       <span style="color: rgb(94, 94, 94)">{{ s.sala1.mostrar.psicologo }}</span>
                     </div>
@@ -143,6 +153,7 @@
                     </ion-button>
                   </div>
                 </ion-col>
+
                 <ion-col 
                   [ngStyle]="{'background-color' : s.sala2.mostrar.psicor}"  
                   class="flex-center borda1 heightCell sizeCell paddingCell" 
@@ -154,11 +165,21 @@
                     (press)="remover(s.sala2.sessaoInteira, s.sala2.sessaoId)" 
                     (click)="setarAtendimento(s.sala2.sessaoId)"
                   >
+                    <span 
+                      class="nomeConvenio" 
+                      [ngStyle]="{'color': s.sala2.mostrar.convenio == 'UNIMED' ? '#00995D' : 'INTERMÉDICA' ? '#f49e00' : 'gray' }" >
+                      {{ s.sala2.mostrar.convenio }}
+                    </span><br>
                     <span><b>{{ s.sala2.mostrar.paciente }}</b></span><br>
                     <span style="color: rgb(94, 94, 94)">{{ s.sala2.mostrar.psicologo }}</span>
                   </div>
                   <div *ngIf="s.sala2.mostrar != '+' && s.sala2.mostrar.frequencia != ''">
-                    <div>
+                    <div (tap)="setarPassouCartao(s.sala2.sessaoInteira, s.sala2.sessaoId)" >
+                      <span 
+                        class="nomeConvenio" 
+                        [ngStyle]="{'color': s.sala2.mostrar.convenio == 'UNIMED' ? '#00995D' : 'INTERMÉDICA' ? '#f49e00' : 'gray' }" >
+                        {{ s.sala2.mostrar.convenio }} <ion-icon *ngIf="s.sala2.mostrar.passouCartao" name="card"></ion-icon>
+                      </span><br>
                       <span><b>{{ s.sala2.mostrar.paciente }}</b></span><br>
                       <span style="color: rgb(94, 94, 94)">{{ s.sala2.mostrar.psicologo }}</span>
                     </div>
@@ -186,11 +207,21 @@
                     (press)="remover(s.sala3.sessaoInteira, s.sala3.sessaoId)" 
                     (click)="setarAtendimento(s.sala3.sessaoId)"
                   >
+                    <span 
+                      class="nomeConvenio" 
+                      [ngStyle]="{'color': s.sala3.mostrar.convenio == 'UNIMED' ? '#00995D' : 'INTERMÉDICA' ? '#f49e00' : 'gray' }" >
+                      {{ s.sala3.mostrar.convenio }}
+                    </span><br>
                     <span><b>{{ s.sala3.mostrar.paciente }}</b></span><br>
                     <span style="color: rgb(94, 94, 94)">{{ s.sala3.mostrar.psicologo }}</span>
                   </div>
                   <div *ngIf="s.sala3.mostrar != '+' && s.sala3.mostrar.frequencia != ''">
-                    <div>
+                    <div (tap)="setarPassouCartao(s.sala3.sessaoInteira, s.sala3.sessaoId)" >
+                      <span 
+                        class="nomeConvenio" 
+                        [ngStyle]="{'color': s.sala3.mostrar.convenio == 'UNIMED' ? '#00995D' : 'INTERMÉDICA' ? '#f49e00' : 'gray' }" >
+                        {{ s.sala3.mostrar.convenio }} <ion-icon *ngIf="s.sala3.mostrar.passouCartao" name="card"></ion-icon>
+                      </span><br>
                       <span><b>{{ s.sala3.mostrar.paciente }}</b></span><br>
                       <span style="color: rgb(94, 94, 94)">{{ s.sala3.mostrar.psicologo }}</span>
                     </div>

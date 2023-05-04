@@ -6,4 +6,5 @@ export interface Psicologo {
     celular?: string;
     crp?: string;
     userId?: string;
+    desativar?: boolean;
 }

@@ -17,7 +17,7 @@
   <ion-grid>
     <ion-row>
       <ion-col *ngFor="let p of psicologos" size="auto">
-        <ion-card button class="ion-padding guias">
+        <ion-card button class="ion-padding guias" [ngStyle]="{'background-color': p.desativar ? '#cecece' : 'white' }">
             <ion-button [routerLink]="['/menu/cadpsicologo',p.id]" color="dark" expand="block" fill="clear" shape="round">
               <span class="texto"><strong>{{ p.nome }}</strong></span>
             </ion-button>

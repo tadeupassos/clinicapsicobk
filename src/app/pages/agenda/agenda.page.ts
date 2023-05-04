@@ -119,6 +119,7 @@ export class AgendaPage {
           handler: () => {
             console.log("id sessao",id);
             this.sessaoService.deleteSessao(id);
+            this.carregarSessoesAgendadas();
           }
         }
       ]
@@ -132,6 +133,13 @@ export class AgendaPage {
       component: AtendimentoPage,
       backdropDismiss: false,
       componentProps : { id }
+    });
+
+    modal.onDidDismiss().then(async (res:any) => {
+      if(res.data != 'nada'){
+        await this.sessaoService.updateSessao(res.data.id, res.data.sessao);
+        this.carregarSessoesAgendadas();
+      }
     });
 
     return await modal.present();

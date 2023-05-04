@@ -156,8 +156,12 @@ export class AgendaGeralPage implements OnInit {
 
       let frequencia = res.frequencia;
 
+      let convenio = res.nomeConvenio;
+
+      let passouCartao = res.passouCartao ? res.passouCartao : false;
+
       return {
-        mostrar: { psicologo, paciente, psicor, frequencia },
+        mostrar: { psicologo, paciente, psicor, frequencia, convenio, passouCartao },
         sessaoId: res.id,
         sessaoInteira: res,
         ...dadosSessao
@@ -445,5 +449,24 @@ export class AgendaGeralPage implements OnInit {
         }
       });
     }
+  }
+
+  setarPassouCartao(sessao: Sessao, id:string){
+    sessao.passouCartao = !sessao.passouCartao;
+    this.sessaoService.updateSessao(id, sessao);
+
+    //////////////////////////////////////////////////////////////
+    // Setando no array da agenda a sessão alterada
+    this.sessaoService.sessoesAgendaGeral.map((agenda:any) => {
+      // Pega o dia correto
+      if(agenda.data.split(' - ')[1] == sessao.dataSessao){
+        agenda.salas.map((sala:any) => {
+          // Pega a sala e a hora corretos
+          if(sala[`sala${sessao.sala}`].hora == sessao.horaSessao){
+            sala[`sala${sessao.sala}`].mostrar.passouCartao = sessao.passouCartao;
+          }
+        });
+      }
+    });
   }
 }

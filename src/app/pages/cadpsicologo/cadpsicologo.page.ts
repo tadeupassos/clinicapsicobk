@@ -37,6 +37,7 @@ export class CadpsicologoPage implements OnInit {
       'senha': [this.psicologo.senha, Validators.compose([Validators.required,])],
       'celular': [this.psicologo.celular, Validators.compose([Validators.required,])],
       'crp': [this.psicologo.crp, Validators.compose([Validators.required,])],
+      'desativar': [this.psicologo.desativar],
     });    
   }
 
@@ -57,6 +58,7 @@ export class CadpsicologoPage implements OnInit {
         'senha': [this.psicologo.senha, Validators.compose([Validators.required,])],
         'celular': [this.psicologo.celular, Validators.compose([Validators.required,])],
         'crp': [this.psicologo.crp, Validators.compose([Validators.required,])],
+        'desativar': [this.psicologo.desativar],
       });  
     });
   }

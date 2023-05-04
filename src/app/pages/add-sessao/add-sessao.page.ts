@@ -56,7 +56,7 @@ export class AddSessaoPage implements OnInit {
     // this.crp = localStorage.getItem("crp");
 
     this.psicologoSubscription = this.psicologoService.getPsicologos().subscribe(data => {
-      this.psicologos = data;
+      this.psicologos = data.filter((p:Psicologo) => !p.desativar);
       console.log("psicologos",this.psicologos);
       this.psicologos.sort((a,b) => { return a.nome < b.nome ? -1 : 1 });
     });  
