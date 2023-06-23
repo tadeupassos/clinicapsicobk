@@ -65,6 +65,8 @@ export class FechamentoPage implements OnInit {
   chkManutencaoPredial = false;
   chkReposicao = false;
 
+  mostrarCards = false;
+
   constructor(
     private convenioService: ConvenioService,
     private psicologoService: PsicologoService,

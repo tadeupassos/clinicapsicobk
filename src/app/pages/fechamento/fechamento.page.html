@@ -180,8 +180,61 @@
       </div>
     </ion-col>
   </ion-row>
+  
+  <br>
 
-  <ion-row style="margin: 0px 40px 40px 12px;">
+  <ion-row style="border: 2px solid gray; margin: 0px 5px; border-radius: 2px;">
+    <ion-col class="flex-center bordaLateral" style="color: #475F94; font-weight: bold;" size="3">Psicólogo</ion-col>
+    <ion-col class="flex-center bordaLateral" style="color: #048243; font-weight: bold;" size="1">Bruto</ion-col>
+    <ion-col class="flex-center bordaLateral" style="color: #048243; font-weight: bold;" size="1">Repasse</ion-col>
+    <ion-col class="flex-center bordaLateral" style="color: cadetblue; font-weight: bold;" size="1">Qtde</ion-col>
+    <ion-col size="6">
+      <ion-row>
+        <ion-col class="flex-center bordaLateral" size="1">P</ion-col>
+        <ion-col class="flex-center bordaLateral" size="1">F P</ion-col>
+        <ion-col class="flex-center bordaLateral" size="1">F J P</ion-col>
+        <ion-col class="flex-center bordaLateral" size="1">F T</ion-col>
+        <ion-col class="flex-center bordaLateral" size="1">F J T</ion-col>
+        <ion-col class="flex-center bordaLateral" size="1">R e F</ion-col>
+        <ion-col class="flex-center bordaLateral" size="1">M P</ion-col>
+        <ion-col class="flex-center bordaLateral" size="1">Repos.</ion-col>
+      </ion-row>
+    </ion-col>
+  </ion-row>
+  <div style="margin-top: 5px;"></div>
+  <ion-row *ngFor="let r of resumo" 
+    style="border: 1px solid rgb(116, 116, 116); margin: 0px 5px; border-radius: 2px;">
+    <ion-col class="flex-center bordaLateral" style="color: #475F94;" size="3">{{ r.nome }}</ion-col>
+    <ion-col class="flex-center bordaLateral" style="color: #048243;" size="1">{{ r.valorConvenio | currency:'BRL' }}</ion-col>
+    <ion-col class="flex-center bordaLateral" style="color: #048243;" size="1">{{ r.repasse | currency:'BRL' }}</ion-col>
+    <ion-col class="flex-center bordaLateral" style="color: cadetblue;" size="1">{{ r.qtdeConvenio }}</ion-col>
+    <ion-col size="6">
+      <ion-row>
+        <ion-col class="flex-center bordaLateral" size="1">{{ r.presencaC }}</ion-col>
+        <ion-col class="flex-center bordaLateral" size="1">{{ r.faltaPaciente }}</ion-col>
+        <ion-col class="flex-center bordaLateral" size="1">{{ r.faltaJustificadaPaciente }}</ion-col>
+        <ion-col class="flex-center bordaLateral" size="1">{{ r.faltaTerapeuta }}</ion-col>
+        <ion-col class="flex-center bordaLateral" size="1">{{ r.faltaJustificadaTerapeuta }}</ion-col>
+        <ion-col class="flex-center bordaLateral" size="1">{{ r.recessosFeriados }}</ion-col>
+        <ion-col class="flex-center bordaLateral" size="1">{{ r.manutencaoPredial }}</ion-col>
+        <ion-col class="flex-center bordaLateral" size="1">{{ r.reposicao }}</ion-col>
+      </ion-row>
+    </ion-col>
+  </ion-row>
+
+  <br>
+
+  <ion-row>
+    <ion-col size="2">
+      <ion-button (click)="mostrarCards = !mostrarCards" expand="block">
+        <span *ngIf="!mostrarCards">Mostrar Cards</span>
+        <span *ngIf="mostrarCards">Esconder Cards</span>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+
+
+  <ion-row *ngIf="mostrarCards" style="margin: 0px 40px 40px 12px;">
     <ion-col *ngFor="let r of resumo" size="3">
       <div class="cartao">
         <div class="nome">
@@ -254,6 +307,5 @@
       </div>
     </ion-col>
   </ion-row>
-
 
 </ion-content>
